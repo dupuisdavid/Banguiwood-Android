@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <ImageView
+		android:id="@+id/banguiwoodLogoImageView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="170dp"
+		android:contentDescription="@string/blank"
+		android:src="@drawable/splashscreen_banguiwood_logo"
+		android:background="#00ffffff" />
+    
+    <com.afrikawood.banguiwood.utils.CustomFontTextView
+        android:id="@+id/theBiggestVideosPlateformOfCentralAfricanRepublicTextView"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_below="@+id/banguiwoodLogoImageView"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@string/fontPlayBold"
+        android:textColor="#ffd4001d"
+        android:textSize="14sp"
+		android:textAllCaps="false"
+		android:text="@string/textTheBiggestVideosPlateformOfCentralAfricanRepublic"
+		android:gravity="center" />
+    
+    <ProgressBar
+		android:id="@+id/loadingProgressBar"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/theBiggestVideosPlateformOfCentralAfricanRepublicTextView"
+		android:layout_marginTop="15dp" />
+    
+    <ImageView
+		android:id="@+id/banguiwoodOtherLogosImageView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_alignParentBottom="true"
+		android:layout_marginBottom="30dp"
+		android:contentDescription="@string/blank"
+		android:src="@drawable/splashscreen_other_logos"
+		android:background="#00ffffff" />
+    
+    <com.afrikawood.banguiwood.utils.CustomFontTextView
+        android:id="@+id/copyrightTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="25dp"
+        android:textColor="#ff666666"
+        android:textSize="7sp"
+		android:textAllCaps="false"
+		android:text="@string/textCopyright"
+		android:gravity="center" />
+
+</RelativeLayout>

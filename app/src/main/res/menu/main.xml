@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:id="@+id/backButtonItem" android:icon="@drawable/toggle_menu_button" android:showAsAction="always" android:title="@string/toggleMenuText" android:visible="true" />
+    <item android:id="@+id/logo" android:gravity="center_horizontal" android:icon="@drawable/navbar_logo" android:showAsAction="always" android:title="@string/appName" android:visible="true" />
+    <item android:id="@+id/slideRightMenuButtonItem" android:icon="@drawable/toggle_menu_button" android:showAsAction="always" android:title="@string/toggleMenuText" android:visible="true" />
+    
+    
+
+</menu>

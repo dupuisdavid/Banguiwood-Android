@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
+    
+    <RelativeLayout 
+	    android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:layout_margin="0dp"
+    	android:background="#ffffffff">
+    	
+        <RelativeLayout 
+            android:id="@+id/videoPlayerWrapperView"
+	    	android:layout_width="match_parent"
+    		android:layout_height="220dp"
+    		android:background="#ff000000">
+    	</RelativeLayout>
+    	
+        <com.afrikawood.banguiwood.utils.CustomFontTextView
+	        android:id="@+id/sectionTitleTextView"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/videoPlayerWrapperView"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginBottom="0dp"
+	        android:layout_marginRight="20dp"
+	        android:textColor="#ffdf1f26"
+	        android:textSize="12sp" />
+        
+        <com.afrikawood.banguiwood.utils.CustomFontTextView
+	        android:id="@+id/videoTitleTextView"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/sectionTitleTextView"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginBottom="0dp"
+	        android:layout_marginRight="20dp"
+	        android:textColor="#ff000000"
+	        android:textSize="13sp"
+	        android:textStyle="bold" />
+        
+        <com.afrikawood.banguiwood.utils.CustomFontTextView
+	        android:id="@+id/videoPublicationDateTextView"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/videoTitleTextView"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginBottom="0dp"
+	        android:layout_marginRight="20dp"
+	        android:textColor="#ff666666"
+	        android:textSize="12sp" />
+        
+        <RelativeLayout
+	    	android:id="@+id/suggestionsView"
+        	android:layout_width="match_parent"
+        	android:layout_height="104dp"
+        	android:layout_marginBottom="50dp"
+        	android:layout_alignParentBottom="true"
+        	android:background="#ffffffff">
+        	
+        	<com.afrikawood.banguiwood.utils.CustomFontTextView
+		        android:layout_width="match_parent"
+		        android:layout_height="22dp"
+		        android:textColor="#ffffffff"
+		        android:textSize="11sp"
+		        android:background="#ff4e443b"
+		        android:paddingTop="3dp"
+		        android:paddingLeft="20dp"
+		        android:text="@string/textVideoSuggestions"
+		        android:drawableLeft="@drawable/suggestions_header_arrow"
+		        android:drawablePadding="8dp" />
+        	
+        	<HorizontalScrollView
+			    android:id="@+id/videoSuggestionsListView"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:layout_marginTop="27dp"
+			    android:paddingLeft="20dp"
+			    android:paddingRight="0dp"
+			    android:scrollbars="none">
+			    
+        	   	<LinearLayout
+			        android:id="@+id/innerVideoSuggestionsListView"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:gravity="center_vertical"
+			        android:orientation="horizontal">
+
+				</LinearLayout>
+				
+        	</HorizontalScrollView>
+
+		</RelativeLayout>
+        
+        <RelativeLayout
+	    	android:id="@+id/adWrapperLayout"
+        	android:layout_width="match_parent"
+        	android:layout_height="50dp"
+        	android:layout_alignParentBottom="true"
+        	android:layout_centerHorizontal="true"
+        	android:background="#ffffffff">
+		</RelativeLayout>
+
+	</RelativeLayout>
+    
+
+</FrameLayout>

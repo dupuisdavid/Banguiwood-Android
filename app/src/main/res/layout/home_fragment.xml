@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
+    	
+		<ScrollView 
+		    android:id="@+id/scrollView"
+		    android:layout_width="match_parent" 
+	        android:layout_height="match_parent"
+	        android:scrollbars="none"
+			android:scrollbarSize="0dp"
+	  		android:background="#ffffffff"
+	  		android:alpha="0">
+	          
+          	<LinearLayout 
+          	    android:id="@+id/scrollViewWrapperView"
+          	    android:layout_width="match_parent" 
+          	    android:layout_height="wrap_content" 
+          	    android:orientation="vertical"
+          	    android:descendantFocusability="blocksDescendants">
+          	    
+				<com.afrikawood.banguiwood.utils.CustomFontTextView
+			        android:layout_width="match_parent"
+			        android:layout_height="47dp"
+			        android:fontFamily="@string/fontPlayBold"
+			        android:textColor="#ffd4001d"
+			        android:textSize="14sp"
+					android:textAllCaps="false"
+					android:background="#ffffffff"
+					android:text="@string/textTheBiggestVideosPlateformOfCentralAfricanRepublic"
+					android:gravity="center" />
+			        
+		        <RelativeLayout 
+		            android:id="@+id/videoPlayerWrapperView"
+			    	android:layout_width="match_parent"
+		    		android:layout_height="220dp"
+		    		android:background="#ff000000" />
+		
+		        <com.afrikawood.banguiwood.utils.CustomFontTextView
+			        android:id="@+id/videoTitleTextView"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:paddingTop="7dp"
+			        android:paddingLeft="20dp"
+			        android:paddingRight="20dp"
+			        android:paddingBottom="3dp"
+			        android:textColor="#ff000000"
+			        android:textSize="13sp"
+			        android:textStyle="bold" />
+		        
+		        <com.afrikawood.banguiwood.utils.CustomFontTextView
+			        android:id="@+id/videoPublicationDateTextView"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginBottom="5dp"
+			        android:paddingLeft="20dp"
+			        android:paddingRight="20dp"
+			        android:paddingBottom="5dp"
+			        android:textColor="#ff666666"
+			        android:textSize="12sp" 
+			        android:background="@drawable/dashed_border" />
+			    
+		        
+		        
+		        
+		        
+		        
+		        
+		        <com.afrikawood.banguiwood.tools.BounceListView
+					android:id="@+id/listView"
+			    	android:layout_width="match_parent"
+			    	android:layout_height="1450dp"
+			    	android:scrollbars="none"
+			    	android:layout_marginTop="5dp"
+			    	android:layout_marginBottom="5dp"
+			    	android:background="#ffffffff"
+			    	android:divider="@null"
+			    	android:visibility="gone" />
+		        
+		        <View
+					android:layout_width="match_parent"
+			    	android:layout_height="1dp"
+			    	android:layout_marginBottom="10dp"
+					android:background="@drawable/dashed_border" />
+		        
+		        <RelativeLayout
+				    android:id="@+id/adWrapperLayout"
+			        android:layout_width="match_parent"
+			        android:layout_height="50dp"
+			        android:layout_gravity="bottom|center"
+			        android:background="#ffffffff">
+				</RelativeLayout>
+				
+		        <View
+					android:layout_width="match_parent"
+			    	android:layout_height="1dp"
+			    	android:layout_marginTop="10dp"
+					android:background="@drawable/dashed_border" />
+		
+		        <com.afrikawood.banguiwood.utils.CustomFontTextView
+			        android:id="@+id/copyrightTextView"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginBottom="3dp"
+			        android:layout_marginTop="10dp"
+			        android:textColor="#ff666666"
+			        android:textSize="7sp"
+					android:textAllCaps="false"
+					android:text="@string/textCopyright"
+					android:gravity="center" />
+		        
+
+		</LinearLayout>
+	          	
+	</ScrollView>
+	
+	<ProgressBar
+		android:id="@+id/loadingProgressBar"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:layout_marginBottom="50dp" />
+
+	
+
+
+   
+
+</FrameLayout>
