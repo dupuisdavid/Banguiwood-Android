@@ -1,12 +1,6 @@
 package com.afrikawood.banguiwood;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -35,15 +29,22 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.util.TextUtils;
 
 public class ArticlesListFragment extends BaseFragment {
 
-	private ArticlesListFragment self = this;
-	private MainActivity context;
-	private FrameLayout rootView;
 	private SectionArticles section;
 	private String breadCrumbsString;
+    private boolean forceBackButton;
+
+    private FrameLayout rootView;
 	private TextView breadCrumbsTextView;
 	private ProgressBar loadingProgressBar;
 	private AdView adView;
@@ -51,51 +52,56 @@ public class ArticlesListFragment extends BaseFragment {
 	private BounceListView listView;
 	private ListAdapter listViewAdapter;
 	private ArrayList<Object> dataList;
-	
-	public ArticlesListFragment(SectionArticles section, String breadCrumbsString, Boolean forceBackButton) {
-		
-		this.section = section;
-		this.breadCrumbsString = breadCrumbsString;
-		
-		setActionBarLeftButtonType(forceBackButton ? ButtonType.BACK : ButtonType.NONE);
-		setActionBarRightButtonType(ButtonType.MENU);
-		
-	}
-	
-	public ArticlesListFragment() {
-		
-	}
+
+    private static final String ARG_SECTION = "section";
+    private static final String ARG_BREAD_CRUMBS = "breadCrumbs";
+    private static final String ARG_FORCE_BACK_BUTTON = "forceBackButton";
+
+    public static ArticlesListFragment newInstance(SectionArticles section, String breadCrumbsString, boolean forceBackButton) {
+        ArticlesListFragment fragment = new ArticlesListFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_SECTION, section);
+        args.putString(ARG_BREAD_CRUMBS, breadCrumbsString);
+        args.putBoolean(ARG_FORCE_BACK_BUTTON, forceBackButton);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public ArticlesListFragment() {}
 	
 	@Override
-    public void onAttach(Activity activity) {
-	
-        if (activity instanceof MainActivity) {
-        	context = (MainActivity) activity;
-        }
-
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+		super.onAttach(context);
     }
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            section = getArguments().getParcelable(ARG_SECTION);
+            breadCrumbsString = getArguments().getString(ARG_BREAD_CRUMBS);
+            forceBackButton = getArguments().getBoolean(ARG_FORCE_BACK_BUTTON);
+        }
+
+        setActionBarLeftButtonType(forceBackButton ? ButtonType.BACK : ButtonType.NONE);
+        setActionBarRightButtonType(ButtonType.MENU);
     }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = (FrameLayout) inflater.inflate(R.layout.playlist_fragment, container, false);
-		rootView.setAnimationCacheEnabled(true);
 		rootView.setDrawingCacheEnabled(true);
 		
 		breadCrumbsTextView = (TextView) rootView.findViewById(R.id.breadCrumbsTextView);
 		breadCrumbsTextView.setText(breadCrumbsString);
 		loadingProgressBar = (ProgressBar) rootView.findViewById(R.id.loadingProgressBar);
 		
-		dataList = new ArrayList<Object>();
+		dataList = new ArrayList<>();
 		
 		setupList();
 		
-		if (Network.networkIsAvailable(context)) {
+		if (Network.networkIsAvailable(getContext())) {
 			
 			if (section != null) {
 				
@@ -120,13 +126,13 @@ public class ArticlesListFragment extends BaseFragment {
 							@Override
 							public void run() {
 								
-								final String textAlertDialogViewTitle = context.getResources().getString(R.string.textAlertDialogViewTitle);
-								final String textServerConnectionImpossible = context.getResources().getString(R.string.textServerConnectionImpossible);
+								final String textAlertDialogViewTitle = getContext().getResources().getString(R.string.textAlertDialogViewTitle);
+								final String textServerConnectionImpossible = getContext().getResources().getString(R.string.textServerConnectionImpossible);
 								
 								AnimationUtilities.fadeOut(loadingProgressBar, new Runnable() {
 									@Override
 									public void run() {
-										AlertDialogBuilder.build(context, textAlertDialogViewTitle, textServerConnectionImpossible);
+										AlertDialogBuilder.build(getContext(), textAlertDialogViewTitle, textServerConnectionImpossible);
 									}
 								});
 								
@@ -154,12 +160,12 @@ public class ArticlesListFragment extends BaseFragment {
 		Log.i("dataList", "" + dataList);
 		
 		listView = (BounceListView) rootView.findViewById(R.id.listView);
-        listViewAdapter = new ListAdapter(context, dataList);
+        listViewAdapter = new ListAdapter(getContext(), dataList);
         listView.setAdapter(listViewAdapter);
         
         listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {   
-                view.setSelected(true); // <== Will cause the highlight to remain
+                view.setSelected(true);
                 
                 Object data = dataList.get(position);
                 
@@ -167,15 +173,13 @@ public class ArticlesListFragment extends BaseFragment {
                 	Article article = (Article) data;
 
 					if (getActivity() instanceof MainActivity) {
-                        ArticleFragment fragment = new ArticleFragment(article, section, true);
-
+                        ArticleFragment fragment = ArticleFragment.newInstance(article, section, true);
                         if (fragment != null) {
                             MainActivity mainActivity = (MainActivity) getActivity();
                             mainActivity.switchContent(fragment, true);
                         }
 
                     }
-
 				}
             }
         });
@@ -190,7 +194,7 @@ public class ArticlesListFragment extends BaseFragment {
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		
-		adView = new AdView(context);
+		adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobArticleListViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);
@@ -205,20 +209,20 @@ public class ArticlesListFragment extends BaseFragment {
 	
 	private void requestForSectionArticlesItems(final String sectionArticlesUrl, final Runnable successRunnable, final Runnable failureRunnable) {
 		
-		if (!Network.networkIsAvailable(context)) {
+		if (!Network.networkIsAvailable(getContext())) {
 			return;
 		}
 		
 		if (!sectionArticlesUrl.equals("")) {
 			
 			String url = sectionArticlesUrl;
-			Log.i("URL", "" + url);
+			Log.i("URL", url);
 			
 			HttpRestClient.get(url, null, new JsonHttpResponseHandler() {
 	            @Override
 	            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 	            	if (response != null) {
-	            		self.parseSectionArticles(response);
+	            		ArticlesListFragment.this.parseSectionArticles(response);
 						if (successRunnable != null) {
 		                	successRunnable.run();
 		                }
@@ -235,7 +239,7 @@ public class ArticlesListFragment extends BaseFragment {
 			
 			
 		} else {
-			self.parseSectionArticles(new JSONArray());
+			this.parseSectionArticles(new JSONArray());
 			if (successRunnable != null) {
             	successRunnable.run();
             }
@@ -272,47 +276,39 @@ public class ArticlesListFragment extends BaseFragment {
 	@Override
 	public void onStart(){
 		super.onStart();
-	    Log.i("" + this.getClass(), "onStart");
-	    
-	    if (section != null && !section.getName().equals("")) {
-	    	context.trackView(section.getName());
+	    if (section != null && !TextUtils.isEmpty(section.name)) {
+			((MainActivity) getActivity()).trackView(section.name);
 	    }
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.i("" + this.getClass(), "onResume");
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.i("" + this.getClass(), "onPause");
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.i("" + this.getClass(), "onStop");
 	}
 	
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		Log.i("" + this.getClass(), "onDestroyView");
 	}
 	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.i("" + this.getClass(), "onDestroy");
 	}
 	
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		Log.i("" + this.getClass(), "onDetach");
 	}
 
 	@Override

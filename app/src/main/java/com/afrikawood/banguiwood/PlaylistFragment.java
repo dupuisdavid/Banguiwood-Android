@@ -1,15 +1,6 @@
 package com.afrikawood.banguiwood;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Random;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -40,12 +31,19 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Random;
+
 import cz.msebera.android.httpclient.Header;
 
 public class PlaylistFragment extends BaseFragment {
 
-	private PlaylistFragment self = this;
-	private MainActivity context;
 	private FrameLayout rootView;
 	private SectionPlaylist section;
 	private String breadCrumbsString;
@@ -71,16 +69,11 @@ public class PlaylistFragment extends BaseFragment {
 	public PlaylistFragment() {
 		
 	}
-	
-	@Override
-    public void onAttach(Activity activity) {
-	
-        if (activity instanceof MainActivity) {
-        	context = (MainActivity) activity;
-        }
 
-        super.onAttach(activity);
-    }
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+	}
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,7 +94,7 @@ public class PlaylistFragment extends BaseFragment {
 		
 		setupList();
 		
-		if (Network.networkIsAvailable(context)) {
+		if (Network.networkIsAvailable(getContext())) {
 			
 			if (section != null) {
 				
@@ -126,13 +119,13 @@ public class PlaylistFragment extends BaseFragment {
 							@Override
 							public void run() {
 								
-								final String textAlertDialogViewTitle = context.getResources().getString(R.string.textAlertDialogViewTitle);
-								final String textServerConnectionImpossible = context.getResources().getString(R.string.textServerConnectionImpossible);
+								final String textAlertDialogViewTitle = getContext().getResources().getString(R.string.textAlertDialogViewTitle);
+								final String textServerConnectionImpossible = getContext().getResources().getString(R.string.textServerConnectionImpossible);
 								
 								AnimationUtilities.fadeOut(loadingProgressBar, new Runnable() {
 									@Override
 									public void run() {
-										AlertDialogBuilder.build(context, textAlertDialogViewTitle, textServerConnectionImpossible);
+										AlertDialogBuilder.build(getContext(), textAlertDialogViewTitle, textServerConnectionImpossible);
 									}
 								});
 								
@@ -159,7 +152,7 @@ public class PlaylistFragment extends BaseFragment {
 		Log.i("dataList", "" + dataList);
 		
 		listView = (BounceListView) rootView.findViewById(R.id.listView);
-        listViewAdapter = new ListAdapter(context, dataList);
+        listViewAdapter = new ListAdapter(getContext(), dataList);
         listView.setAdapter(listViewAdapter);
         
         listView.setOnItemClickListener(new OnItemClickListener() {
@@ -170,34 +163,25 @@ public class PlaylistFragment extends BaseFragment {
                 
                 if (data instanceof Section) {
                 	SectionPlaylist sectionPlaylist = (SectionPlaylist) data;
-                	String breadCrumbsString = String.format(context.getResources().getString(R.string.textBreadCrumbs), self.breadCrumbsString, StringUtilities.purgeUnwantedSpaceInText(sectionPlaylist.getName()));
-                	
-                	if (sectionPlaylist != null) {
-	                	if (getActivity() instanceof MainActivity) {
-	                		PlaylistFragment fragment  = new PlaylistFragment(sectionPlaylist, String.format(Locale.FRENCH, breadCrumbsString, self.section.getName(), sectionPlaylist.getName()), true);
-	    					
-	    					if (fragment != null) {
-	    						MainActivity mainActivity = (MainActivity) getActivity();
-	    						mainActivity.switchContent(fragment, true);
-	    					}
-	    					
-	    				}
-                	}
+                	String breadCrumbsString = String.format(getContext().getResources().getString(R.string.textBreadCrumbs), PlaylistFragment.this.breadCrumbsString, StringUtilities.purgeUnwantedSpaceInText(sectionPlaylist.name));
+
+					if (getActivity() instanceof MainActivity) {
+						PlaylistFragment fragment  = new PlaylistFragment(sectionPlaylist, String.format(Locale.FRENCH, breadCrumbsString, PlaylistFragment.this.section.name, sectionPlaylist.name), true);
+
+						MainActivity mainActivity = (MainActivity) getActivity();
+						mainActivity.switchContent(fragment, true);
+
+					}
                 	
                 } else if (data instanceof Video) {
                 	Video video = (Video) data;
-                	
-                	if (video != null) {
-                		if (getActivity() instanceof MainActivity) {
-                    		PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.getYoutubeVideoIdentifier()));
-        					
-        					if (fragment != null) {
-        						MainActivity mainActivity = (MainActivity) getActivity();
-        						mainActivity.switchContent(fragment, true);
-        					}
-        					
-        				}
-                	}
+
+					if (getActivity() instanceof MainActivity) {
+						PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.getYoutubeVideoIdentifier()));
+						MainActivity mainActivity = (MainActivity) getActivity();
+						mainActivity.switchContent(fragment, true);
+					}
+
                 }
             }
         });
@@ -212,7 +196,7 @@ public class PlaylistFragment extends BaseFragment {
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		
-		adView = new AdView(context);
+		adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobPlaylistViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);
@@ -231,14 +215,14 @@ public class PlaylistFragment extends BaseFragment {
 	
 	private void requestForSectionPlayListItems(final String playlistIdentifier, String nextPageToken, final Runnable successRunnable, final Runnable failureRunnable) {
 		
-		if (!Network.networkIsAvailable(context)) {
+		if (!Network.networkIsAvailable(getContext())) {
 			return;
 		}
 		
 		if (!playlistIdentifier.equals("")) {
 			
-			String unformattedURL = context.getResources().getString(R.string.youtubeApiPlaylistItemsServiceURL);
-			String youtubeBrowserApiKey = context.getResources().getString(R.string.youtubeBrowserApiKey);
+			String unformattedURL = getContext().getResources().getString(R.string.youtubeApiPlaylistItemsServiceURL);
+			String youtubeBrowserApiKey = getContext().getResources().getString(R.string.youtubeBrowserApiKey);
 				
 			String url = String.format(unformattedURL, playlistIdentifier, youtubeBrowserApiKey, 50, (!nextPageToken.equals("") ? "&pageToken=" + nextPageToken : ""));
 			Log.i("URL", "" + url);
@@ -252,7 +236,7 @@ public class PlaylistFragment extends BaseFragment {
 	            		try {
 	            			
 							JSONArray videos = (JSONArray) response.getJSONArray("items");
-							self.parseSectionsPlayList(videos);
+							PlaylistFragment.this.parseSectionsPlayList(videos);
 							
 
 							String nextPageToken = null;
@@ -262,7 +246,7 @@ public class PlaylistFragment extends BaseFragment {
 							
 							if (nextPageToken != null && !nextPageToken.equals("")) {
 								requestLoopIndex = requestLoopIndex + 1;
-								self.requestForSectionPlayListItems(playlistIdentifier, nextPageToken, successRunnable, failureRunnable);
+								PlaylistFragment.this.requestForSectionPlayListItems(playlistIdentifier, nextPageToken, successRunnable, failureRunnable);
 							} else {
 								if (successRunnable != null) {
 				                	successRunnable.run();
@@ -289,7 +273,7 @@ public class PlaylistFragment extends BaseFragment {
 			
 		} else {
 			
-			self.parseSectionsPlayList(new JSONArray());
+			this.parseSectionsPlayList(new JSONArray());
 			
 			if (successRunnable != null) {
             	successRunnable.run();
@@ -305,7 +289,7 @@ public class PlaylistFragment extends BaseFragment {
 		
 		if (requestLoopIndex == 0) {
 			if (section != null) {
-				subSections = section.getSections();
+				subSections = section.sections;
 				
 				for (int i = 0; i < subSections.size(); i++) {
 					Section section = subSections.get(i);
@@ -320,7 +304,7 @@ public class PlaylistFragment extends BaseFragment {
 			try {
 				
 				JSONObject videoDictionary = (JSONObject) data.get(i);
-				Video video = Video.getVideoDataFromJSONObject(context, videoDictionary);
+				Video video = Video.getVideoDataFromJSONObject(getContext(), videoDictionary);
 				dataList.add(video);
 				
 			} catch (JSONException e) {
@@ -334,7 +318,7 @@ public class PlaylistFragment extends BaseFragment {
 	
 	private ArrayList<Video> pickVideosSuggestions(int pickNumber, String youtubeVideoIdentifier) {
 	    
-	    int pickNumberLimit = pickNumber > ((int) dataList.size()) ? (((int) dataList.size()) - 1) : pickNumber;
+	    int pickNumberLimit = pickNumber > (dataList.size()) ? ((dataList.size()) - 1) : pickNumber;
 	    
 	    HashMap<String, Video> videosSuggestions = new HashMap<String, Video>();
 	    
@@ -381,8 +365,8 @@ public class PlaylistFragment extends BaseFragment {
 		super.onStart();
 	    Log.i("" + this.getClass(), "onStart");
 	    
-	    if (section != null && !section.getName().equals("")) {
-	    	context.trackView(section.getName());
+	    if (section != null && !section.name.equals("")) {
+			((MainActivity) getContext()).trackView(section.name);
 	    }
 	}
 	

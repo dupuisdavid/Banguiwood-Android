@@ -193,7 +193,7 @@ public class MainActivity
 	public void setupHomeFragment() {
 		
 		Section homeSection = sectionsTreeData.get(0);
-		SectionPlaylist inFrontSectionPlaylist = (SectionPlaylist) homeSection.getSections().get(0);
+		SectionPlaylist inFrontSectionPlaylist = (SectionPlaylist) homeSection.sections.get(0);
 		
 		HomeFragment fragment = new HomeFragment(inFrontSectionPlaylist);
 		fragment.setDelegate(this);
@@ -392,9 +392,9 @@ public class MainActivity
 				
 				JSONObject data = (JSONObject) arrayData.get(i);
 				Section section = new Section();
-				section.setIdentifier(data.getString("id"));
-				section.setName(StringUtilities.purgeUnwantedSpaceInText(data.getString("name")));
-				section.setIsRootSection(true);
+				section.identifier = data.getString("id");
+				section.name = StringUtilities.purgeUnwantedSpaceInText(data.getString("name"));
+				section.isRootSection = true;
 				
 				sectionsTreeData.add(section);
 				
@@ -447,26 +447,22 @@ public class MainActivity
 					
 				}
 				
-				section.setIdentifier(data.getString("id"));
-				section.setName(StringUtilities.purgeUnwantedSpaceInText(data.getString("name")));
+				section.identifier = data.getString("id");
+				section.name = StringUtilities.purgeUnwantedSpaceInText(data.getString("name"));
 				
 				if (data.has("type")) {
-					section.setSectionType(sectionType);
+					section.sectionType = sectionType;
+				}
+
+				section.websiteCategoryRootUrl = data.has("websiteCategoryRootURL") ? data.getString("websiteCategoryRootURL") : "";
+				
+				section.isRootSection = false;
+				
+				if (parentSection.sections == null) {
+					parentSection.sections = new ArrayList<>();
 				}
 				
-				if (data.has("websiteCategoryRootURL")) {
-					section.setWebsiteCategoryRootURL(data.getString("websiteCategoryRootURL"));
-				} else {
-					section.setWebsiteCategoryRootURL("");
-				}
-				
-				section.setIsRootSection(false);
-				
-				if (parentSection.getSections() == null) {
-					parentSection.setSections(new ArrayList<Section>());
-				}
-				
-				parentSection.getSections().add(section);
+				parentSection.sections.add(section);
 				
 				String arrows = "";
 				for (int j = 0; j < treeDeepIndex; j++) {
@@ -626,7 +622,6 @@ public class MainActivity
 	@Override
 	protected void onNewIntent(final Intent intent) {
 		super.onNewIntent(null);
-        Log.i(this.getClass().getSimpleName().toString(), "onNewIntent");
         
         if (intent != null) {
         	Log.i("intent onNewIntent", "" + intent + ", flags : " + intent.getFlags() + ", action : " + intent.getAction() + ", scheme : " + intent.getScheme());

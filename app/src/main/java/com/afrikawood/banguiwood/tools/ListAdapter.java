@@ -1,11 +1,10 @@
 package com.afrikawood.banguiwood.tools;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import java.util.ArrayList;
 
 public class ListAdapter extends BaseAdapter {
 
@@ -157,7 +158,7 @@ public class ListAdapter extends BaseAdapter {
 				holder.data = article;
 //				Log.i("position", "position : " + position);
 				
-				updateVideoOrArticleHolder(holder, article.getTitle(), article.getThumbnailURL(), "");
+				updateVideoOrArticleHolder(holder, article.title, article.thumbnailUrl, "");
 				
 			}
 		
@@ -176,8 +177,8 @@ public class ListAdapter extends BaseAdapter {
 			holder.titleTextView.setLayoutParams(titleTextViewLayoutParams);
 			holder.titleTextView.setTextSize(12);
 			holder.titleTextView.setLines(3);
-			holder.titleTextView.setGravity(Gravity.LEFT | Gravity.CENTER);
-			holder.titleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(section.getName()));
+			holder.titleTextView.setGravity(Gravity.START | Gravity.CENTER);
+			holder.titleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(section.name));
 			
 		}
 		
@@ -202,21 +203,16 @@ public class ListAdapter extends BaseAdapter {
 		holder.titleTextView.setLayoutParams(titleTextViewLayoutParams);
 		holder.titleTextView.setTextSize(11);
 		holder.titleTextView.setLines(2);
-		holder.titleTextView.setGravity(Gravity.LEFT | Gravity.TOP);
+		holder.titleTextView.setGravity(Gravity.START | Gravity.TOP);
 		holder.titleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(title));
 		
 		holder.publicationDateTextView.setText(publicationDate);
 		
-		String imageURL = thumbnailURL;
-//		Log.i("imageURL", "imageURL : " + imageURL);
-		
-		if (!imageURL.isEmpty()) {
-			imageLoader.displayImage(imageURL, holder.imageView, options, new ImageLoadingListener() {
+		if (!TextUtils.isEmpty(thumbnailURL)) {
+			imageLoader.displayImage(thumbnailURL, holder.imageView, options, new ImageLoadingListener() {
 				
 				@Override
-				public void onLoadingStarted(String arg0, View arg1) {
-					
-				}
+				public void onLoadingStarted(String arg0, View arg1) {}
 				
 				@Override
 				public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
@@ -227,16 +223,14 @@ public class ListAdapter extends BaseAdapter {
 				}
 				
 				@Override
-				public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
+				public void onLoadingComplete(String arg0, View view, Bitmap bitmap) {
 					if (imageViewFadeRefreshEnable) {
 						holder.imageView.animate().alpha(1f).setDuration(350);
 					}
 				}
 				
 				@Override
-				public void onLoadingCancelled(String arg0, View arg1) {
-					
-				}
+				public void onLoadingCancelled(String arg0, View arg1) {}
 			});
 			
 		} else {

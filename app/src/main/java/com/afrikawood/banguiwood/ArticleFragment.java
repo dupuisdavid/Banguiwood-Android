@@ -1,11 +1,12 @@
 package com.afrikawood.banguiwood;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,55 +31,59 @@ import com.google.android.gms.ads.AdView;
 
 public class ArticleFragment extends BaseFragment {
 
-	@SuppressWarnings("unused")
-	private ArticleFragment self = this;
-	private MainActivity context;
-	private FrameLayout rootView;
 	private Section section;
 	private Article article;
+    private boolean forceBackButton;
+
+    private FrameLayout rootView;
 	private ProgressBar loadingProgressBar;
 	private WebView webView;
-	private AdView adView;
-	
-	public ArticleFragment(Article article, Section section, Boolean forceBackButton) {
-		
-		this.article = article;
-		this.section = section;
-		
-		
-		setActionBarLeftButtonType(forceBackButton ? ButtonType.BACK : ButtonType.NONE);
-		setActionBarRightButtonType(ButtonType.MENU);
-		
-	}
-	
-	public ArticleFragment() {
-		
-	}
+	AdView adView;
+
+    private static final String ARG_ARTICLE = "article";
+    private static final String ARG_SECTION = "section";
+    private static final String ARG_FORCE_BACK_BUTTON = "forceBackButton";
+
+    public static ArticleFragment newInstance(Article article, Section section, boolean forceBackButton) {
+        ArticleFragment fragment = new ArticleFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_ARTICLE, article);
+        args.putParcelable(ARG_SECTION, section);
+        args.putBoolean(ARG_FORCE_BACK_BUTTON, forceBackButton);
+        fragment.setArguments(args);
+
+        return new ArticleFragment();
+    }
+
+	public ArticleFragment() {}
 	
 	@Override
-    public void onAttach(Activity activity) {
-	
-        if (activity instanceof MainActivity) {
-        	context = (MainActivity) activity;
-        }
-
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+		super.onAttach(context);
     }
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            article = getArguments().getParcelable(ARG_ARTICLE);
+            section = getArguments().getParcelable(ARG_SECTION);
+            forceBackButton = getArguments().getBoolean(ARG_FORCE_BACK_BUTTON);
+        }
+
+        setActionBarLeftButtonType(forceBackButton ? ButtonType.BACK : ButtonType.NONE);
+        setActionBarRightButtonType(ButtonType.MENU);
     }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = (FrameLayout) inflater.inflate(R.layout.article_fragment, container, false);
-		rootView.setAnimationCacheEnabled(true);
 		rootView.setDrawingCacheEnabled(true);
-		
+
 		loadingProgressBar = (ProgressBar) rootView.findViewById(R.id.loadingProgressBar);
 		
-		if (Network.networkIsAvailable(context)) {
+		if (Network.networkIsAvailable(getContext())) {
 			
 			if (article != null) {
 				
@@ -103,11 +108,11 @@ public class ArticleFragment extends BaseFragment {
 	@SuppressLint("SetJavaScriptEnabled")
 	public void setupWebView() {
 		
-		if (article == null || article.getURL().equals("")) {
+		if (article == null || TextUtils.isEmpty(article.url)) {
 			return;
 		}
 		
-		String URL = article.getURL();
+		String URL = article.url;
 		Log.i("URL", URL);   
 		
 		webView = (WebView) rootView.findViewById(R.id.webView);
@@ -187,7 +192,7 @@ public class ArticleFragment extends BaseFragment {
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		
-		adView = new AdView(context);
+		adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobArticleViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);
@@ -210,8 +215,8 @@ public class ArticleFragment extends BaseFragment {
 		super.onStart();
 	    Log.i("" + this.getClass(), "onStart");
 	    
-	    if (section != null && !section.getName().equals("")) {
-	    	context.trackView(String.format("%s/%s", section.getName(), article.getTitle()));
+	    if (section != null && !TextUtils.isEmpty(section.name)) {
+            ((MainActivity) getContext()).trackView(String.format("%s/%s", section.name, article.title));
 	    }
 	}
 	

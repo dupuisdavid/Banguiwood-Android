@@ -380,7 +380,7 @@ public class HomeFragment extends BaseFragment {
 		
 		if (requestLoopIndex == 0) {
 			if (section != null) {
-				subSections = section.getSections();
+				subSections = section.sections;
 				
 				for (int i = 0; i < subSections.size(); i++) {
 					Section section = subSections.get(i);
@@ -479,8 +479,8 @@ public class HomeFragment extends BaseFragment {
 	    super.onStart();
 	    Log.i("" + this.getClass(), "onStart");
 	    
-	    if (section != null && !section.getName().equals("")) {
-	    	context.trackView(section.getName());
+	    if (section != null && !section.name.equals("")) {
+	    	context.trackView(section.name);
 	    }
 	    
 	}

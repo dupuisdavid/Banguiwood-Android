@@ -1,35 +1,35 @@
 package com.afrikawood.banguiwood.business;
 
-import java.util.Date;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 
 import com.afrikawood.banguiwood.R;
 import com.afrikawood.banguiwood.utils.DateUtilities;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Date;
+
 public class Video {
 	
-	public static final String JSON_KEY_SNIPPET = "snippet";
-	public static final String JSON_KEY_TITLE = "title";
-	public static final String JSON_KEY_RESOURCE_ID = "resourceId";
-	public static final String JSON_KEY_YOUTUBE_VIDEO_IDENTIFIER = "videoId";
-	public static final String JSON_KEY_PUBLICATION_DATE = "publishedAt";
-	public static final String JSON_KEY_DESCRIPTION = "description";
-	public static final String JSON_KEY_THUMBNAILS = "thumbnails";
-	public static final String JSON_KEY_DEFAULT_THUMBNAIL = "default";
-	public static final String JSON_KEY_MEDIUM_THUMBNAIL = "medium";
-	public static final String JSON_KEY_HIGH_THUMBNAIL = "high";
-	public static final String JSON_KEY_THUMBNAIL_URL = "url";
+	private static final String JSON_KEY_SNIPPET = "snippet";
+	private static final String JSON_KEY_TITLE = "title";
+	private static final String JSON_KEY_RESOURCE_ID = "resourceId";
+	private static final String JSON_KEY_YOUTUBE_VIDEO_IDENTIFIER = "videoId";
+	private static final String JSON_KEY_PUBLICATION_DATE = "publishedAt";
+	private static final String JSON_KEY_DESCRIPTION = "description";
+	private static final String JSON_KEY_THUMBNAILS = "thumbnails";
+	private static final String JSON_KEY_DEFAULT_THUMBNAIL = "default";
+	private static final String JSON_KEY_MEDIUM_THUMBNAIL = "medium";
+	private static final String JSON_KEY_HIGH_THUMBNAIL = "high";
+	private static final String JSON_KEY_THUMBNAIL_URL = "url";
 
 	private String title;
 	private String youtubeVideoIdentifier;
 	private Date publicationDate;
 	private String description;
-	private String defaultThumbnailURL;
-	private String mediumThumbnailURL;
+	private String defaultThumbnailUrl;
+	private String mediumThumbnailUrl;
 	private String highThumbnailURL;
 	
 	public String getTitle() {
@@ -56,28 +56,16 @@ public class Video {
 		this.publicationDate = publicationDate;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getDefaultThumbnailURL() {
-		return defaultThumbnailURL;
+	public void setDefaultThumbnailUrl(String defaultThumbnailUrl) {
+		this.defaultThumbnailUrl = defaultThumbnailUrl;
 	}
 
-	public void setDefaultThumbnailURL(String defaultThumbnailURL) {
-		this.defaultThumbnailURL = defaultThumbnailURL;
-	}
-
-	public String getMediumThumbnailURL() {
-		return mediumThumbnailURL;
-	}
-
-	public void setMediumThumbnailURL(String mediumThumbnailURL) {
-		this.mediumThumbnailURL = mediumThumbnailURL;
+	public void setMediumThumbnailUrl(String mediumThumbnailUrl) {
+		this.mediumThumbnailUrl = mediumThumbnailUrl;
 	}
 
 	public String getHighThumbnailURL() {
@@ -90,24 +78,13 @@ public class Video {
 
 	public Video() {
 		super();
-		this.title = new String();
-		this.youtubeVideoIdentifier = new String();
+		this.title = "";
+		this.youtubeVideoIdentifier = "";
 		this.publicationDate = new Date();
-		this.description = new String();
-		this.defaultThumbnailURL = new String();
-		this.mediumThumbnailURL = new String();
-		this.highThumbnailURL = new String();
-	}
-
-	public Video(String title, String youtubeVideoIdentifier, Date publicationDate, String description, String defaultThumbnailURL, String mediumThumbnailURL, String highThumbnailURL) {
-		super();
-		this.title = title;
-		this.youtubeVideoIdentifier = youtubeVideoIdentifier;
-		this.publicationDate = publicationDate;
-		this.description = description;
-		this.defaultThumbnailURL = defaultThumbnailURL;
-		this.mediumThumbnailURL = mediumThumbnailURL;
-		this.highThumbnailURL = highThumbnailURL;
+		this.description = "";
+		this.defaultThumbnailUrl = "";
+		this.mediumThumbnailUrl = "";
+		this.highThumbnailURL = "";
 	}
 	
 	public static Video getVideoDataFromJSONObject(Context context, JSONObject JSONObject) {
@@ -148,13 +125,13 @@ public class Video {
 	    			
 	    			if (thumbnailsDictionary.has(JSON_KEY_DEFAULT_THUMBNAIL)) {
 	    				if (thumbnailsDictionary.getJSONObject(JSON_KEY_DEFAULT_THUMBNAIL).has(JSON_KEY_THUMBNAIL_URL)) {
-	    					video.setDefaultThumbnailURL(thumbnailsDictionary.getJSONObject(JSON_KEY_DEFAULT_THUMBNAIL).getString(JSON_KEY_THUMBNAIL_URL));
+	    					video.setDefaultThumbnailUrl(thumbnailsDictionary.getJSONObject(JSON_KEY_DEFAULT_THUMBNAIL).getString(JSON_KEY_THUMBNAIL_URL));
 	    				}
 	    			}
 	    			
 	    			if (thumbnailsDictionary.has(JSON_KEY_MEDIUM_THUMBNAIL)) {
 	    				if (thumbnailsDictionary.getJSONObject(JSON_KEY_MEDIUM_THUMBNAIL).has(JSON_KEY_THUMBNAIL_URL)) {
-	    					video.setMediumThumbnailURL(thumbnailsDictionary.getJSONObject(JSON_KEY_MEDIUM_THUMBNAIL).getString(JSON_KEY_THUMBNAIL_URL));
+	    					video.setMediumThumbnailUrl(thumbnailsDictionary.getJSONObject(JSON_KEY_MEDIUM_THUMBNAIL).getString(JSON_KEY_THUMBNAIL_URL));
 	    				}
 	    			}
 	    			
@@ -208,13 +185,13 @@ public class Video {
 	    			
 	    			if (thumbnailsDictionary.has(JSON_KEY_DEFAULT_THUMBNAIL)) {
 	    				if (thumbnailsDictionary.getJSONObject(JSON_KEY_DEFAULT_THUMBNAIL).has(JSON_KEY_THUMBNAIL_URL)) {
-	    					video.setDefaultThumbnailURL(thumbnailsDictionary.getJSONObject(JSON_KEY_DEFAULT_THUMBNAIL).getString(JSON_KEY_THUMBNAIL_URL));
+	    					video.setDefaultThumbnailUrl(thumbnailsDictionary.getJSONObject(JSON_KEY_DEFAULT_THUMBNAIL).getString(JSON_KEY_THUMBNAIL_URL));
 	    				}
 	    			}
 	    			
 	    			if (thumbnailsDictionary.has(JSON_KEY_MEDIUM_THUMBNAIL)) {
 	    				if (thumbnailsDictionary.getJSONObject(JSON_KEY_MEDIUM_THUMBNAIL).has(JSON_KEY_THUMBNAIL_URL)) {
-	    					video.setMediumThumbnailURL(thumbnailsDictionary.getJSONObject(JSON_KEY_MEDIUM_THUMBNAIL).getString(JSON_KEY_THUMBNAIL_URL));
+	    					video.setMediumThumbnailUrl(thumbnailsDictionary.getJSONObject(JSON_KEY_MEDIUM_THUMBNAIL).getString(JSON_KEY_THUMBNAIL_URL));
 	    				}
 	    			}
 	    			

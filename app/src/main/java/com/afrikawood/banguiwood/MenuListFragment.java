@@ -58,11 +58,11 @@ public class MenuListFragment extends ListFragment {
 		for (int i = 0; i < sections.size(); i++) {
 			
 			Section section = (Section) sections.get(i);
-			menuItems.add(new MenuItem(section.getName(), android.R.drawable.ic_menu_search, true, -1, i));
+			menuItems.add(new MenuItem(section.name, android.R.drawable.ic_menu_search, true, -1, i));
 			
-			for (int j = 0; j < section.getSections().size(); j++) {
-				Section subSection = (Section) section.getSections().get(j);
-				menuItems.add(new MenuItem(subSection.getName(), android.R.drawable.ic_menu_search, false, i, j));
+			for (int j = 0; j < section.sections.size(); j++) {
+				Section subSection = (Section) section.sections.get(j);
+				menuItems.add(new MenuItem(subSection.name, android.R.drawable.ic_menu_search, false, i, j));
 			}
 		}
 
@@ -73,36 +73,36 @@ public class MenuListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		MenuItem menuItem = (MenuItem) adapter.getItems().get(position);
+		MenuItem menuItem = adapter.getItems().get(position);
 //		Log.i("menuItem", "" + menuItem.getIsRootSection() + ", " + menuItem.getParentSectionIndex());
 		
-		if (!menuItem.getIsRootSection()) {
+		if (!menuItem.isRootSection) {
 			ArrayList<Section> sections = ((MainActivity) context).getSectionsTreeData();
-			Section rootSection = sections.get(menuItem.getParentSectionIndex());
-//			Log.i("parentSection", "" + parentSection + ", " + parentSection.getSections().size());
+			Section rootSection = sections.get(menuItem.parentSectionIndex);
+//			Log.i("parentSection", "" + parentSection + ", " + parentSection.sections.size());
 			
-			int sectionIndex = menuItem.getSectionIndex();
+			int sectionIndex = menuItem.sectionIndex;
 //			Log.i("sectionIndex", "" + sectionIndex);
 			
-			if (sectionIndex < rootSection.getSections().size()) {
+			if (sectionIndex < rootSection.sections.size()) {
 				
-				Section section = rootSection.getSections().get(sectionIndex);
-//				Log.i("section", "" + position + ", " + parentSection.getSections().get(sectionIndex));
+				Section section = rootSection.sections.get(sectionIndex);
+//				Log.i("section", "" + position + ", " + parentSection.sections.get(sectionIndex));
 				
 				if (section != null) {
-					Log.i("getSectionType", "" + section.getSectionType());
+					Log.i("getSectionType", "" + section.sectionType);
 					
 					String breadCrumbsString = context.getResources().getString(R.string.textBreadCrumbs);
 					
-					if (menuItem.getParentSectionIndex() == 0 && sectionIndex == 0) {
+					if (menuItem.parentSectionIndex == 0 && sectionIndex == 0) {
 						if (context instanceof MainActivity) {
 							((MainActivity) context).setupHomeFragment();
 						}
 					} else if (section instanceof SectionPlaylist) {
-						PlaylistFragment fragment = new PlaylistFragment((SectionPlaylist) section, String.format(Locale.FRENCH, breadCrumbsString, rootSection.getName(), section.getName()), false);
+						PlaylistFragment fragment = new PlaylistFragment((SectionPlaylist) section, String.format(Locale.FRENCH, breadCrumbsString, rootSection.name, section.name), false);
 						switchFragment(fragment);
 					} else if (section instanceof SectionArticles) {
-						ArticlesListFragment fragment = new ArticlesListFragment((SectionArticles) section, String.format(Locale.FRENCH, breadCrumbsString, rootSection.getName(), section.getName()), false);
+						ArticlesListFragment fragment = ArticlesListFragment.newInstance((SectionArticles) section, String.format(Locale.FRENCH, breadCrumbsString, rootSection.name, section.name), false);
 						switchFragment(fragment);
 					}
 				}

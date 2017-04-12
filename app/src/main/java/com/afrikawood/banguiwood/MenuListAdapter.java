@@ -1,7 +1,5 @@
 package com.afrikawood.banguiwood;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.afrikawood.banguiwood.business.MenuItem;
+
+import java.util.ArrayList;
 
 public class MenuListAdapter extends ArrayAdapter<MenuItem> {
 	
@@ -82,7 +82,7 @@ public class MenuListAdapter extends ArrayAdapter<MenuItem> {
 				
 				if (view == null) {
 					
-					if (!menuItem.getIsRootSection()) {
+					if (!menuItem.isRootSection) {
 						view = layoutInflater.inflate(R.layout.row, parent, false);
 					} else {
 						view = layoutInflater.inflate(R.layout.section_row, parent, false);
@@ -105,11 +105,11 @@ public class MenuListAdapter extends ArrayAdapter<MenuItem> {
 				
 				
 //				holder.icon.setImageResource(getItem(position).getIconRes());
-				holder.title.setText(getItem(position).getTag());
+				holder.title.setText(getItem(position).tag);
 				
 			} else {
 			
-				if (!menuItem.getIsRootSection()) {
+				if (!menuItem.isRootSection) {
 					view = layoutInflater.inflate(R.layout.row, parent, false);
 				} else {
 					view = layoutInflater.inflate(R.layout.section_row, parent, false);
@@ -118,7 +118,7 @@ public class MenuListAdapter extends ArrayAdapter<MenuItem> {
 	//			ImageView icon = (ImageView) view.findViewById(R.id.row_icon);
 				TextView title = (TextView) view.findViewById(R.id.row_title);
 				
-				title.setText(getItem(position).getTag());
+				title.setText(getItem(position).tag);
 			}
 
 		}

@@ -74,8 +74,8 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		
 		String urlToShare = "";
 		
-		if (!section.getWebsiteCategoryRootURL().equals("")) {
-			urlToShare = urlToShare + section.getWebsiteCategoryRootURL();
+		if (!section.websiteCategoryRootUrl.equals("")) {
+			urlToShare = urlToShare + section.websiteCategoryRootUrl;
 			urlToShare = urlToShare + String.format(Locale.FRENCH, "youtubegallery?videoid=%s", video.getYoutubeVideoIdentifier());
 		} else {
 			urlToShare = String.format(Locale.FRENCH, "https://www.youtube.com/watch?v=%s", video.getYoutubeVideoIdentifier());
@@ -110,7 +110,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		});
 		
 		sectionTitleTextView = (CustomFontTextView) rootView.findViewById(R.id.sectionTitleTextView);
-		sectionTitleTextView.setText(section.getName());
+		sectionTitleTextView.setText(section.name);
 		videoTitleTextView = (CustomFontTextView) rootView.findViewById(R.id.videoTitleTextView);
 		videoPublicationDateTextView = (CustomFontTextView) rootView.findViewById(R.id.videoPublicationDateTextView);
 		innerVideoSuggestionsListView = (LinearLayout) rootView.findViewById(R.id.innerVideoSuggestionsListView);
@@ -226,8 +226,8 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		super.onStart();
 	    Log.i("" + this.getClass(), "onStart");
 	    
-	    if (section != null && !section.getName().equals("")) {
-	    	context.trackView(String.format("%s/%s", section.getName(), video.getTitle()));
+	    if (section != null && !section.name.equals("")) {
+	    	context.trackView(String.format("%s/%s", section.name, video.getTitle()));
 	    }
 	}
 	
@@ -250,13 +250,13 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		if (videoPlayerWrapperView != null) {
 	
 			if (context == null) {
-				Log.i(this.getClass().getSimpleName().toString(), "context == null");
+				Log.i(this.getClass().getSimpleName(), "context == null");
 				return;
 			}
 			
 			if (context.videoPlayerView == null) {
 				Log.i("C", "C");
-				Log.i(this.getClass().getSimpleName().toString(), "context.videoPlayerView == null");
+				Log.i(this.getClass().getSimpleName(), "context.videoPlayerView == null");
 				return;
 			}
 
@@ -283,13 +283,11 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.i("" + this.getClass(), "onDestroy");
 	}
 	
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		Log.i("" + this.getClass(), "onDetach");
 	}
 	
 	

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="appName">Banguiwood</string>
-    
+
     <!-- GOOGLE ANALYTICS -->
     <string name="googleAnalyticsTrackingId">UA&#8211;50195844&#8211;2</string>
     <!-- GOOGLE ADMOB -->
@@ -15,7 +15,7 @@
     <string name="googleAdMobArticleViewBlockIdentifier">ca-app-pub-4304398196712394/6040145860</string>
     <!-- GOOGLE APIS -->
     <string name="googleDevelopperApiKey">AIzaSyCoR9DRnnGCJS5bagj2iGXr44c2i0GuIMA</string>
-	<!-- PARSE -->
+    <!-- PARSE -->
     <string name="parseApplicationId">DfVOGSSlDlCIAiAoTA63EGVWBhPm2JdC6k9jP4hK</string>
     <string name="parseClientKey">2hpFzozsyxNQEswVbDNpIW1NGJHtXyiyn4edrqqm</string>
 
@@ -23,7 +23,7 @@
     <string name="youtubeBrowserApiKey">AIzaSyBrojvIsA1RpplsA_UeWvzBnpWkaFZ8wC0</string>
     <string name="youtubeAndroidApiKey">AIzaSyBqc3FccA3spi_nv0NIuEy2AsRsbITP0dE</string>
     <string name="projectSectionsTreeServiceURL">http://mobile.banguiwood.com/banguiwood-data-categories.json</string>
-    
+
     <string name="youtubePublishedAtDateFormat">yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'</string>
     <string name="youtubeApiPlaylistItemsServiceURL" formatted="false">https://www.googleapis.com/youtube/v3/playlistItems?playlistId=%s&amp;key=%s&amp;maxResults=%d&amp;part=id,snippet,contentDetails,status%s</string>
     <string name="youtubeApiVideoDetailServiceURL" formatted="false">https://www.googleapis.com/youtube/v3/videos?channelId=%s&amp;key=%s&amp;part=id,snippet&amp;id=%s</string>
@@ -33,31 +33,31 @@
     <string name="listItemDateLabelColor">#caaf99</string>
     <string name="listItemDateLabelAlternateColor">#ffbd4d</string>
     <string name="HTTPDefaultTimeoutDuration">10000</string>
-    
+
     <string name="uiAlertViewTitle">Banguiwood</string>
-    
+
     <!-- FB APP ID -->
-	<string name="facebookAppId">1466133196954776</string>
-	
-	<!-- TWITTER APP PARAMETERS -->
-	<string name="twitterConsumerKey">Q5vbe96u5DM9u3a0vUkKyXNhl</string>
-	<string name="twitterConsumerSecret">7Qep9ELjiq8anS62w15Cb9bbE6UnFWdZ4VwqnytKV7Rsq7U5oV</string>
-	<string name="twitterOauthAccessToken">290529038-MESJ3K7LdSJF1ykiugWSWftZD7mj6ZAIboRhoNcb</string>
-	<string name="twitterOauthAccessTokenSecret">wTIsEEhEkVN7plWjyw85vRBrABDDjJiJACUhCHaAIttQo</string>
-	<string name="twitterPreferenceName">twitter_oauth</string>
-	<string name="twitterPrefKeyOauthToken">oauth_token</string>
-	<string name="twitterPrefKeyOauthSecret">oauth_token_secret</string>
-	<string name="twitterPrefKeyTwitterLogin">isTwitterLogedIn</string>
-	<string name="twitterCallbackBaseUrl">com.afrikawood.banguiwood://</string>
-	<string name="twitterCallbackMethodName">twitterLoginSuccess</string>
-	<string name="twitterUrlTwitterAuth">auth_url</string>
-	<string name="twitterUrlTwitterOauthVerifier">oauth_verifier</string>
-	<string name="twitterUrlTwitterOauthToken">oauth_token</string>
-    
+    <string name="facebookAppId">1466133196954776</string>
+
+    <!-- TWITTER APP PARAMETERS -->
+    <string name="twitterConsumerKey">Q5vbe96u5DM9u3a0vUkKyXNhl</string>
+    <string name="twitterConsumerSecret">7Qep9ELjiq8anS62w15Cb9bbE6UnFWdZ4VwqnytKV7Rsq7U5oV</string>
+    <string name="twitterOauthAccessToken">290529038-MESJ3K7LdSJF1ykiugWSWftZD7mj6ZAIboRhoNcb</string>
+    <string name="twitterOauthAccessTokenSecret">wTIsEEhEkVN7plWjyw85vRBrABDDjJiJACUhCHaAIttQo</string>
+    <string name="twitterPreferenceName">twitter_oauth</string>
+    <string name="twitterPrefKeyOauthToken">oauth_token</string>
+    <string name="twitterPrefKeyOauthSecret">oauth_token_secret</string>
+    <string name="twitterPrefKeyTwitterLogin">isTwitterLogedIn</string>
+    <string name="twitterCallbackBaseUrl">com.afrikawood.banguiwood://</string>
+    <string name="twitterCallbackMethodName">twitterLoginSuccess</string>
+    <string name="twitterUrlTwitterAuth">auth_url</string>
+    <string name="twitterUrlTwitterOauthVerifier">oauth_verifier</string>
+    <string name="twitterUrlTwitterOauthToken">oauth_token</string>
+
     <!-- FONTS -->
     <string name="fontPlayBold">fonts/Play-Bold.ttf</string>
     <string name="fontPlayRegular">fonts/Play-Regular.ttf</string>
-    
+
     <!-- APP UI CUSTOMIZATION PARAMS -->
     <string name="actionBarHexColor">ff4e443b</string>
     <string name="homeActivityTitle">Home Activity</string>
@@ -75,16 +75,19 @@
     <string name="textVideoSuggestions">Vidéos suggérées</string>
     <string name="textPublishedAt" formatted="false">Publié le %s</string>
     <string name="textGooglePlayServicesRequired">Les services Google Play sont requis pour le bon fonctionnement de l\'application Banguiwood !\nInstaller les services Google Play à partir du store Google Play ?</string>
-    
+
     <string name="textFacebook">Facebook</string>
-	<string name="textTwitter">Twitter</string>
-	<string name="textGooglePlus">Google+</string>
-	<string name="textCancel">Annuler</string>
-	<string name="textShareOn">Partager sur</string>
-	<string name="textErrorOccursShareImpossible">Une erreur est survenue, partage impossible pour le moment</string>
-	<string name="textFacebookApplicationPackageName">com.facebook.katana</string>
-	<string name="textFacebookApplicationRequiredToShareContent">L\'installation de l\'application Facebook est requise sur votre appareil.\nTélécharger l\'application Facebook sur le store Google Play ?</string>
+    <string name="textTwitter">Twitter</string>
+    <string name="textGooglePlus">Google+</string>
+    <string name="textCancel">Annuler</string>
+    <string name="textShareOn">Partager sur</string>
+    <string name="textErrorOccursShareImpossible">Une erreur est survenue, partage impossible pour le moment</string>
+    <string name="textFacebookApplicationPackageName">com.facebook.katana</string>
+    <string name="textFacebookApplicationRequiredToShareContent">L\'installation de l\'application Facebook est requise sur votre appareil.\nTélécharger l\'application Facebook sur le store Google Play ?</string>
     <string name="textYes">Oui</string>
-	<string name="textNo">Non</string>
-    
+    <string name="textNo">Non</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
