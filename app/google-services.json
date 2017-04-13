@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1042839436585",
+    "firebase_url": "https://nomadic-oarlock-485.firebaseio.com",
+    "project_id": "nomadic-oarlock-485",
+    "storage_bucket": "nomadic-oarlock-485.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042839436585:android:1ca419e2829b50e1",
+        "android_client_info": {
+          "package_name": "com.afrikawood.banguiwood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042839436585-i2bnped7s4skb3mtsfk6g18tmco82juq.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1042839436585.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMDxniOIOOkj3N-YfIpCSNVbffmqqiPVE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
