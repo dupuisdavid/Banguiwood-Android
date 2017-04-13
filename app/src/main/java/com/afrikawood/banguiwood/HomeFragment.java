@@ -1,14 +1,7 @@
 package com.afrikawood.banguiwood;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,12 +39,18 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
 import cz.msebera.android.httpclient.Header;
 
 public class HomeFragment extends BaseFragment {
 
-	private HomeFragment self = this;
-	private MainActivity context;
 	private View rootView;
 	private SectionPlaylist section;
 	private Video topVideo;
@@ -66,11 +65,6 @@ public class HomeFragment extends BaseFragment {
 	private ArrayList<Object> dataList;
 	
 	private HomeFragmentDelegate delegate;
-	
-	public HomeFragmentDelegate getDelegate() {
-		return delegate;
-	}
-
 	public void setDelegate(HomeFragmentDelegate delegate) {
 		this.delegate = delegate;
 	}
@@ -79,7 +73,7 @@ public class HomeFragment extends BaseFragment {
 	// INTERFACES
 	// ********************************************************************
 
-	public static interface HomeFragmentDelegate {
+    interface HomeFragmentDelegate {
 		void requestForSectionPlayListDidFinish(HomeFragment fragment);
 	}
 	
@@ -92,10 +86,11 @@ public class HomeFragment extends BaseFragment {
 		customActionBarLeftButtonConfiguration.setOnClickRunnable(new Runnable() {
 			@Override
 			public void run() {
-				
-				Intent intent = new Intent(context, InfoActivity.class);
-				context.startActivity(intent);
-				context.overridePendingTransition(R.anim.activity_open_translate_y, R.anim.activity_close_scale);
+
+				Activity activity = getActivity();
+				Intent intent = new Intent(activity, InfoActivity.class);
+				activity.startActivity(intent);
+				activity.overridePendingTransition(R.anim.activity_open_translate_y, R.anim.activity_close_scale);
 				
 			}
 		});
@@ -104,15 +99,11 @@ public class HomeFragment extends BaseFragment {
 		
 		setActionBarRightButtonType(ButtonType.MENU);
 	}
-	
-	@Override
-    public void onAttach(Activity activity) {
-        if (activity instanceof MainActivity) {
-        	context = (MainActivity) activity;
-        }
 
-        super.onAttach(activity);
-    }
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+	}
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,16 +112,16 @@ public class HomeFragment extends BaseFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = (FrameLayout) inflater.inflate(R.layout.home_fragment, container, false);
+		rootView = inflater.inflate(R.layout.home_fragment, container, false);
 		scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
 		
 		loadingProgressBar = (ProgressBar) rootView.findViewById(R.id.loadingProgressBar);
 		
-		dataList = new ArrayList<Object>();
+		dataList = new ArrayList<>();
 		
 		setupList();
 		
-		if (Network.networkIsAvailable(context)) {
+		if (Network.networkIsAvailable(getContext())) {
 			
 			if (section != null) {
 				
@@ -165,7 +156,7 @@ public class HomeFragment extends BaseFragment {
 											@Override
 											public void run() {
 												if (delegate != null) {
-													delegate.requestForSectionPlayListDidFinish(self);
+													delegate.requestForSectionPlayListDidFinish(HomeFragment.this);
 												}
 											}
 										});
@@ -177,13 +168,13 @@ public class HomeFragment extends BaseFragment {
 							@Override
 							public void run() {
 								
-								final String textAlertDialogViewTitle = context.getResources().getString(R.string.textAlertDialogViewTitle);
-								final String textServerConnectionImpossible = context.getResources().getString(R.string.textServerConnectionImpossible);
+								final String textAlertDialogViewTitle = getContext().getResources().getString(R.string.textAlertDialogViewTitle);
+								final String textServerConnectionImpossible = getContext().getResources().getString(R.string.textServerConnectionImpossible);
 								
 								AnimationUtilities.fadeOut(loadingProgressBar, new Runnable() {
 									@Override
 									public void run() {
-										AlertDialogBuilder.build(context, textAlertDialogViewTitle, textServerConnectionImpossible);
+										AlertDialogBuilder.build(getContext(), textAlertDialogViewTitle, textServerConnectionImpossible);
 									}
 								});
 								
@@ -204,7 +195,7 @@ public class HomeFragment extends BaseFragment {
 	
 	private ArrayList<Video> pickVideosSuggestions(int pickNumber, String youtubeVideoIdentifier) {
 	    
-	    int pickNumberLimit = pickNumber > ((int) dataList.size()) ? (((int) dataList.size()) - 1) : pickNumber;
+	    int pickNumberLimit = pickNumber > (dataList.size()) ? ((dataList.size()) - 1) : pickNumber;
 	    
 	    HashMap<String, Video> videosSuggestions = new HashMap<String, Video>();
 	    
@@ -238,7 +229,7 @@ public class HomeFragment extends BaseFragment {
 	    
 	    
 	    
-	    return new ArrayList<Video>(videosSuggestions.values());
+	    return new ArrayList<>(videosSuggestions.values());
 	}
 	
 	public void setupYoutubePlayerFragment() {
@@ -252,25 +243,11 @@ public class HomeFragment extends BaseFragment {
 			final String videoIdentifier = topVideo.getYoutubeVideoIdentifier();
 			
 			if (!videoIdentifier.equals("")) {
-				
-				context.setupYoutubePlayerFragment(videoIdentifier, videoPlayerWrapperView);
-
-/*
-				new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						context.setupYoutubePlayerFragment(videoIdentifier, videoPlayerWrapperView);
-					}
-					
-				}, 1);
-*/
-
+                ((MainActivity) getActivity()).setupYoutubePlayerFragment(videoIdentifier, videoPlayerWrapperView);
 			}
 			
 		} else {
-		
 			videoPlayerWrapperView.setVisibility(View.GONE);
-			
 		}
 		
 	}
@@ -287,7 +264,7 @@ public class HomeFragment extends BaseFragment {
 		
 		
 		videoTitleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(topVideo.getTitle()));
-		videoPublicationDateTextView.setText(String.format(context.getResources().getString(R.string.textPublishedAt), DateUtilities.convertDateToString(topVideo.getPublicationDate(), context.getResources().getString(R.string.displayedPublicationDateFormat))));
+		videoPublicationDateTextView.setText(String.format(getContext().getResources().getString(R.string.textPublishedAt), DateUtilities.convertDateToString(topVideo.getPublicationDate(), getContext().getResources().getString(R.string.displayedPublicationDateFormat))));
 		
 	}
 	
@@ -296,7 +273,7 @@ public class HomeFragment extends BaseFragment {
 		// height : 1450
 
 		
-		int height = (int) (50 * DisplayProperties.getInstance(context).getPixelDensity()) * dataList.size();
+		int height = (int) (50 * DisplayProperties.getInstance(getActivity()).getPixelDensity()) * dataList.size();
 		
 		LinearLayout.LayoutParams listViewLayoutParams = (LinearLayout.LayoutParams) listView.getLayoutParams();
 		listViewLayoutParams.height = height;
@@ -313,7 +290,7 @@ public class HomeFragment extends BaseFragment {
 	
 	private void requestForSectionPlayListItems(final String playlistIdentifier, String nextPageToken, final Runnable successRunnable, final Runnable failureRunnable) {
 		
-		if (!Network.networkIsAvailable(context)) {
+		if (!Network.networkIsAvailable(getContext())) {
 			return;
 		}
 		
@@ -323,8 +300,8 @@ public class HomeFragment extends BaseFragment {
 		
 		final int nbFrontPageVideo = 30;
 		
-		String unformattedURL = context.getResources().getString(R.string.youtubeApiPlaylistItemsServiceURL);
-		String youtubeBrowserApiKey = context.getResources().getString(R.string.youtubeBrowserApiKey);
+		String unformattedURL = getContext().getResources().getString(R.string.youtubeApiPlaylistItemsServiceURL);
+		String youtubeBrowserApiKey = getContext().getResources().getString(R.string.youtubeBrowserApiKey);
 			
 		String url = String.format(unformattedURL, playlistIdentifier, youtubeBrowserApiKey, nbFrontPageVideo, (!nextPageToken.equals("") ? "&pageToken=" + nextPageToken : ""));
 		Log.i("URL", "" + url);
@@ -338,18 +315,18 @@ public class HomeFragment extends BaseFragment {
             		
             		try {
             			
-						JSONArray videos = (JSONArray) response.getJSONArray("items");
-						self.parseSectionsPlayList(videos);
+						JSONArray videos = response.getJSONArray("items");
+						HomeFragment.this.parseSectionsPlayList(videos);
 						
-						String nextPageToken = null;
+						String nextPageToken;
 						if (response.has("nextPageToken")) {
 							nextPageToken = response.getString("nextPageToken");
 						}
-						
+
 						if (nbFrontPageVideo == 0 && nextPageToken != null && !nextPageToken.equals("")) {
 							requestLoopIndex = requestLoopIndex + 1;
-							self.requestForSectionPlayListItems(playlistIdentifier, nextPageToken, successRunnable, failureRunnable);
-							
+                            HomeFragment.this.requestForSectionPlayListItems(playlistIdentifier, nextPageToken, successRunnable, failureRunnable);
+
 						} else {
 							if (successRunnable != null) {
 			                	successRunnable.run();
@@ -369,14 +346,11 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-
-		
-		
 	}
 	
 	private void parseSectionsPlayList(JSONArray data) {
 		
-		ArrayList<Section> subSections = null;
+		ArrayList<Section> subSections;
 		
 		if (requestLoopIndex == 0) {
 			if (section != null) {
@@ -395,9 +369,9 @@ public class HomeFragment extends BaseFragment {
 			try {
 				
 				JSONObject videoDictionary = (JSONObject) data.get(i);
-				Video video = Video.getVideoDataFromJSONObject(context, videoDictionary);
+				Video video = Video.getVideoDataFromJSONObject(getContext(), videoDictionary);
 				
-				if (i == 0 && self.requestLoopIndex == 0) {
+				if (i == 0 && HomeFragment.this.requestLoopIndex == 0) {
 					topVideo = video;
 				} else {
 					dataList.add(video);
@@ -418,7 +392,7 @@ public class HomeFragment extends BaseFragment {
 		
 		listView = (BounceListView) rootView.findViewById(R.id.listView);
 //		listView.setScrollContainer(false);
-        listViewAdapter = new ListAdapter(context, dataList);
+        listViewAdapter = new ListAdapter(getContext(), dataList);
         listView.setAdapter(listViewAdapter);
         
         listView.setOnItemClickListener(new OnItemClickListener() {
@@ -429,19 +403,13 @@ public class HomeFragment extends BaseFragment {
                 
                 if (data instanceof Video) {
                 	Video video = (Video) data;
-                	
-                	if (video != null) {
-                		if (getActivity() instanceof MainActivity) {
-                    		PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.getYoutubeVideoIdentifier()));
-        					
-        					if (fragment != null) {
-        						MainActivity mainActivity = (MainActivity) getActivity();
-        						mainActivity.switchContent(fragment, true);
-        					}
-        					
-        				}
-                	}
-                	
+
+                    if (getActivity() instanceof MainActivity) {
+                        PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.getYoutubeVideoIdentifier()));
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.switchContent(fragment, true);
+                    }
+
                 }
             }
         });
@@ -456,7 +424,7 @@ public class HomeFragment extends BaseFragment {
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		
-		adView = new AdView(context);
+		adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobHomeBannerViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);
@@ -480,7 +448,7 @@ public class HomeFragment extends BaseFragment {
 	    Log.i("" + this.getClass(), "onStart");
 	    
 	    if (section != null && !section.name.equals("")) {
-	    	context.trackView(section.name);
+            ((MainActivity) getActivity()).trackView(section.name);
 	    }
 	    
 	}
@@ -488,37 +456,31 @@ public class HomeFragment extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.i("" + this.getClass(), "onResume");
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.i("" + this.getClass(), "onPause");
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.i("" + this.getClass(), "onStop");
 	}
 	
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		Log.i("" + this.getClass(), "onDestroyView");
 	}
 	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.i("" + this.getClass(), "onDestroy");
 	}
 	
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		Log.i("" + this.getClass(), "onDetach");
 	}
 	
 	@Override

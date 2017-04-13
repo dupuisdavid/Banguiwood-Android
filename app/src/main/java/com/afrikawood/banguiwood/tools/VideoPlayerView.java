@@ -73,11 +73,7 @@ public class VideoPlayerView
 		
 		this.videoIdentifier = videoIdentifier;
 		this.youtubePlayerIsInitialized = false;
-		
-		if (activity instanceof FragmentActivity) {
-			this.activity = (FragmentActivity) activity;
-        }
-		
+		this.activity = activity;
 		
 		if (this.activity != null && !videoIdentifier.equals("")) {
 			init();
@@ -431,9 +427,6 @@ public class VideoPlayerView
 		if (youTubeThumbnailView != null) {
 			youTubeThumbnailView = null;
 		}
-		
-		
-		
 	}
 	
 	@Override

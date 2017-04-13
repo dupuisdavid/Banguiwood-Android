@@ -53,15 +53,15 @@ public class MenuListFragment extends ListFragment {
 	
 	public void refreshList(ArrayList<Section> sections) {
 		
-		ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
+		ArrayList<MenuItem> menuItems = new ArrayList<>();
 		
 		for (int i = 0; i < sections.size(); i++) {
 			
-			Section section = (Section) sections.get(i);
+			Section section = sections.get(i);
 			menuItems.add(new MenuItem(section.name, android.R.drawable.ic_menu_search, true, -1, i));
 			
 			for (int j = 0; j < section.sections.size(); j++) {
-				Section subSection = (Section) section.sections.get(j);
+				Section subSection = section.sections.get(j);
 				menuItems.add(new MenuItem(subSection.name, android.R.drawable.ic_menu_search, false, i, j));
 			}
 		}
@@ -99,11 +99,9 @@ public class MenuListFragment extends ListFragment {
 							((MainActivity) context).setupHomeFragment();
 						}
 					} else if (section instanceof SectionPlaylist) {
-						PlaylistFragment fragment = new PlaylistFragment((SectionPlaylist) section, String.format(Locale.FRENCH, breadCrumbsString, rootSection.name, section.name), false);
-						switchFragment(fragment);
+						switchFragment(PlaylistFragment.newInstance(section, String.format(Locale.FRENCH, breadCrumbsString, rootSection.name, section.name), false));
 					} else if (section instanceof SectionArticles) {
-						ArticlesListFragment fragment = ArticlesListFragment.newInstance((SectionArticles) section, String.format(Locale.FRENCH, breadCrumbsString, rootSection.name, section.name), false);
-						switchFragment(fragment);
+						switchFragment(ArticlesListFragment.newInstance((SectionArticles) section, String.format(Locale.FRENCH, breadCrumbsString, rootSection.name, section.name), false));
 					}
 				}
 				

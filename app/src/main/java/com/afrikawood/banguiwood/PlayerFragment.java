@@ -1,9 +1,7 @@
 package com.afrikawood.banguiwood;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -32,10 +30,11 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.youtube.player.YouTubePlayer;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class PlayerFragment extends BaseFragment implements VideoSuggestionViewDelegate {
 
-	private PlayerFragment self = this;
-	private MainActivity context;
 	private FrameLayout rootView;
 	private Section section;
 	private Video video;
@@ -62,11 +61,13 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 			@Override
 			public void run() {
 				Log.i("SHARE", "CLICK");
-				context.openShareDialog(self.video.getTitle(), getUrlToShare());
+                ((MainActivity) getActivity()).openShareDialog(PlayerFragment.this.video.getTitle(), getUrlToShare());
 			}
 		});
 		
 		setActionBarCustomRightButtonConfiguration(customActionBarRightButtonConfiguration);
+
+
 		
 	}
 	
@@ -83,15 +84,10 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		
 		return urlToShare;
 	}
-	
-	@Override
-    public void onAttach(Activity activity) {
-	
-        if (activity instanceof MainActivity) {
-        	context = (MainActivity) activity;
-        }
 
-        super.onAttach(activity);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 	
 	@Override
@@ -122,7 +118,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 			setupVideoSuggestions();
 	    }
 		
-		if (Network.networkIsAvailable(context)) {
+		if (Network.networkIsAvailable(getContext())) {
 			// AD
 			setupAdMobBanner();
 		}
@@ -132,7 +128,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	
 	public void setVideoInformations(Video video) {
 		videoTitleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(video.getTitle()));
-		videoPublicationDateTextView.setText(String.format(context.getResources().getString(R.string.textPublishedAt), DateUtilities.convertDateToString(video.getPublicationDate(), context.getResources().getString(R.string.displayedPublicationDateFormat))));
+		videoPublicationDateTextView.setText(String.format(getContext().getResources().getString(R.string.textPublishedAt), DateUtilities.convertDateToString(video.getPublicationDate(), getContext().getResources().getString(R.string.displayedPublicationDateFormat))));
 	}
 	
 	public void setupYoutubePlayerFragment() {
@@ -149,7 +145,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 				new Handler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						context.setupYoutubePlayerFragment(videoIdentifier, videoPlayerWrapperView, true);
+                        ((MainActivity) getActivity()).setupYoutubePlayerFragment(videoIdentifier, videoPlayerWrapperView, true);
 					}
 				}, 1000);
 			}
@@ -167,10 +163,12 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		if (videoSuggestions == null) {
 			return;
 		}
+
+        Activity activity = getActivity();
 	    
-	    int w = (int) (78 * DisplayProperties.getInstance(context).getPixelDensity());
-	    int h = (int) (73 * DisplayProperties.getInstance(context).getPixelDensity());
-	    int rightMargin = (int) (12 * DisplayProperties.getInstance(context).getPixelDensity());
+	    int w = (int) (78 * DisplayProperties.getInstance(activity).getPixelDensity());
+	    int h = (int) (73 * DisplayProperties.getInstance(activity).getPixelDensity());
+	    int rightMargin = (int) (12 * DisplayProperties.getInstance(activity).getPixelDensity());
 	    
 	    for (int i=0; i<videoSuggestions.size(); i++) {
 	        
@@ -181,9 +179,9 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 //	        Log.i("setupVideoSuggestions", "" + i);
 	        LinearLayout.LayoutParams videoSuggestionViewLayoutParams = new LinearLayout.LayoutParams(w, h);
 	        videoSuggestionViewLayoutParams.rightMargin = rightMargin;
-	        VideoSuggestionView videoSuggestionView = new VideoSuggestionView(context, video);
+	        VideoSuggestionView videoSuggestionView = new VideoSuggestionView(activity, video);
 	        videoSuggestionView.setLayoutParams(videoSuggestionViewLayoutParams);
-	        videoSuggestionView.setDelegate(self);
+	        videoSuggestionView.setDelegate(this);
 	        innerVideoSuggestionsListView.addView(videoSuggestionView);   
 	    }	
 	}
@@ -191,7 +189,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	@Override
 	public void didTapVideoSuggestionView(VideoSuggestionView view, Video video) {
 		setVideoInformations(video);
-		context.videoPlayerView.setVideo(video.getYoutubeVideoIdentifier(), false);
+        ((MainActivity) getActivity()).videoPlayerView.setVideo(video.getYoutubeVideoIdentifier(), false);
 	}
 	
 	public void setupAdMobBanner() {
@@ -203,7 +201,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		
-		adView = new AdView(context);
+		adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobPlayerViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);
@@ -227,7 +225,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	    Log.i("" + this.getClass(), "onStart");
 	    
 	    if (section != null && !section.name.equals("")) {
-	    	context.trackView(String.format("%s/%s", section.name, video.getTitle()));
+            ((MainActivity) getActivity()).trackView(String.format("%s/%s", section.name, video.getTitle()));
 	    }
 	}
 	
@@ -246,21 +244,23 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		// MAKE A SCREENSHOT OF THIS FRAGMENT DURING ANIMATION
 		// OR A SCREENSHOT OF UNDERLINE FRAGMENT
 		// TODO
+
+        MainActivity activity = ((MainActivity) getActivity());
 		
 		if (videoPlayerWrapperView != null) {
 	
-			if (context == null) {
+			if (activity == null) {
 				Log.i(this.getClass().getSimpleName(), "context == null");
 				return;
 			}
 			
-			if (context.videoPlayerView == null) {
+			if (activity.videoPlayerView == null) {
 				Log.i("C", "C");
 				Log.i(this.getClass().getSimpleName(), "context.videoPlayerView == null");
 				return;
 			}
 
-			YouTubePlayer player = context.videoPlayerView.getPlayer();
+			YouTubePlayer player = activity.videoPlayerView.getPlayer();
 			if (player != null && player.isPlaying()) {
 				player.pause();
 //				videoPlayerWrapperView.getChildAt(0).setVisibility(View.GONE);

@@ -45,8 +45,11 @@ import cz.msebera.android.httpclient.Header;
 public class PlaylistFragment extends BaseFragment {
 
 	private FrameLayout rootView;
+
 	private SectionPlaylist section;
-	private String breadCrumbsString;
+    private String breadCrumbs;
+    private boolean forceBackButton;
+
 	private TextView breadCrumbsTextView;
 	private ProgressBar loadingProgressBar;
 	private AdView adView;
@@ -55,20 +58,23 @@ public class PlaylistFragment extends BaseFragment {
 	private BounceListView listView;
 	private ListAdapter listViewAdapter;
 	private ArrayList<Object> dataList;
+
+    private static final String ARG_SECTION = "section";
+    private static final String ARG_BREADCRUMBS = "section";
+    private static final String ARG_FORCE_BACK_BUTTON = "forceBackButton";
+
+    public static PlaylistFragment newInstance(Section section, String breadCrumbs, Boolean forceBackButton) {
+        PlaylistFragment fragment = new PlaylistFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_SECTION, section);
+        args.putString(ARG_BREADCRUMBS, breadCrumbs);
+        args.putBoolean(ARG_FORCE_BACK_BUTTON, forceBackButton);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 	
-	public PlaylistFragment(SectionPlaylist section, String breadCrumbsString, Boolean forceBackButton) {
-		
-		this.section = section;
-		this.breadCrumbsString = breadCrumbsString;
-		
-		setActionBarLeftButtonType(forceBackButton ? ButtonType.BACK : ButtonType.NONE);
-		setActionBarRightButtonType(ButtonType.MENU);
-		
-	}
-	
-	public PlaylistFragment() {
-		
-	}
+	public PlaylistFragment() {}
 
 	@Override
 	public void onAttach(Context context) {
@@ -78,19 +84,27 @@ public class PlaylistFragment extends BaseFragment {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            section = getArguments().getParcelable(ARG_SECTION);
+            breadCrumbs = getArguments().getString(ARG_BREADCRUMBS);
+            forceBackButton = getArguments().getBoolean(ARG_FORCE_BACK_BUTTON);
+        }
+
+        setActionBarLeftButtonType(forceBackButton ? ButtonType.BACK : ButtonType.NONE);
+        setActionBarRightButtonType(ButtonType.MENU);
     }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = (FrameLayout) inflater.inflate(R.layout.playlist_fragment, container, false);
-		rootView.setAnimationCacheEnabled(true);
 		rootView.setDrawingCacheEnabled(true);
 		
 		breadCrumbsTextView = (TextView) rootView.findViewById(R.id.breadCrumbsTextView);
-		breadCrumbsTextView.setText(breadCrumbsString);
+		breadCrumbsTextView.setText(breadCrumbs);
 		loadingProgressBar = (ProgressBar) rootView.findViewById(R.id.loadingProgressBar);
 		
-		dataList = new ArrayList<Object>();
+		dataList = new ArrayList<>();
 		
 		setupList();
 		
@@ -163,10 +177,10 @@ public class PlaylistFragment extends BaseFragment {
                 
                 if (data instanceof Section) {
                 	SectionPlaylist sectionPlaylist = (SectionPlaylist) data;
-                	String breadCrumbsString = String.format(getContext().getResources().getString(R.string.textBreadCrumbs), PlaylistFragment.this.breadCrumbsString, StringUtilities.purgeUnwantedSpaceInText(sectionPlaylist.name));
+                	String breadCrumbsString = String.format(getContext().getResources().getString(R.string.textBreadCrumbs), PlaylistFragment.this.breadCrumbs, StringUtilities.purgeUnwantedSpaceInText(sectionPlaylist.name));
 
 					if (getActivity() instanceof MainActivity) {
-						PlaylistFragment fragment  = new PlaylistFragment(sectionPlaylist, String.format(Locale.FRENCH, breadCrumbsString, PlaylistFragment.this.section.name, sectionPlaylist.name), true);
+                        PlaylistFragment fragment  = PlaylistFragment.newInstance(sectionPlaylist, String.format(Locale.FRENCH, breadCrumbsString, PlaylistFragment.this.section.name, sectionPlaylist.name), true);
 
 						MainActivity mainActivity = (MainActivity) getActivity();
 						mainActivity.switchContent(fragment, true);
@@ -352,7 +366,7 @@ public class PlaylistFragment extends BaseFragment {
 	    
 	    
 	    
-	    return new ArrayList<Video>(videosSuggestions.values());
+	    return new ArrayList<>(videosSuggestions.values());
 	}
 	
 	@Override
@@ -373,37 +387,31 @@ public class PlaylistFragment extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.i("" + this.getClass(), "onResume");
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.i("" + this.getClass(), "onPause");
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.i("" + this.getClass(), "onStop");
 	}
 	
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		Log.i("" + this.getClass(), "onDestroyView");
 	}
 	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.i("" + this.getClass(), "onDestroy");
 	}
 	
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		Log.i("" + this.getClass(), "onDetach");
 	}
 
 	@Override

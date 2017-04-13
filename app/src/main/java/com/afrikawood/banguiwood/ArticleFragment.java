@@ -52,7 +52,7 @@ public class ArticleFragment extends BaseFragment {
         args.putBoolean(ARG_FORCE_BACK_BUTTON, forceBackButton);
         fragment.setArguments(args);
 
-        return new ArticleFragment();
+        return fragment;
     }
 
 	public ArticleFragment() {}
