@@ -7,7 +7,7 @@
 		android:id="@+id/imageView"
 		android:layout_width="match_parent"
 		android:layout_height="50dp"
-		android:contentDescription="@string/blank"
+		android:contentDescription="@null"
 		android:scaleType="center"
 		android:background="#00ffffff"
 		android:alpha="0" />
@@ -15,7 +15,7 @@
     <ImageView
 		android:layout_width="match_parent"
 		android:layout_height="50dp"
-		android:contentDescription="@string/blank"
+		android:contentDescription="@null"
 		android:scaleType="center"
 		android:background="#00ffffff"
 		android:alpha="0.75"

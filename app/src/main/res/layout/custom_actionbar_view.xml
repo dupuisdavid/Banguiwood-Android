@@ -33,7 +33,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="0dp"
-        android:contentDescription="@string/blank"
+		android:contentDescription="@null"
         android:alpha="0.0"
         android:visibility="gone"
         android:padding="0dp" />
@@ -43,7 +43,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
-		android:contentDescription="@string/blank"
+		android:contentDescription="@null"
 		android:src="@drawable/navbar_logo" 
 		android:padding="0dp"
 		android:background="#00ffffff" />
@@ -55,7 +55,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="0dp"
-        android:contentDescription="@string/blank"
+		android:contentDescription="@null"
         android:src="@drawable/toggle_menu_button"
         android:background="#00ffffff"
         android:padding="0dp" />
@@ -67,7 +67,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="0dp"
-        android:contentDescription="@string/blank"
+		android:contentDescription="@null"
         android:alpha="0.0"
         android:visibility="gone"
         android:padding="0dp" />

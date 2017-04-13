@@ -26,7 +26,7 @@
 			android:id="@+id/playImageButton"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:contentDescription="@string/blank"
+			android:contentDescription="@null"
 			android:src="@drawable/play_button"
 			android:alpha="0.75"
 			android:background="#00ffffff" />

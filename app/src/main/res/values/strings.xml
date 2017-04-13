@@ -61,7 +61,6 @@
     <!-- APP UI CUSTOMIZATION PARAMS -->
     <string name="actionBarHexColor">ff4e443b</string>
     <string name="homeActivityTitle">Home Activity</string>
-    <string name="blank"></string>
     <string name="toggleMenuText">Ouvrir/fermer le menu</string>
 
     <!-- TEXTS -->
