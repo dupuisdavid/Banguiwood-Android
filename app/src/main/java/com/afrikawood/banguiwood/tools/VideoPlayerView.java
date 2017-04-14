@@ -1,6 +1,5 @@
 package com.afrikawood.banguiwood.tools;
 
-import net.louislam.android.L;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.content.Context;
@@ -30,6 +29,8 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 
+import net.louislam.android.L;
+
 public class VideoPlayerView 
 	extends 
 		RelativeLayout 
@@ -39,12 +40,10 @@ public class VideoPlayerView
 		YouTubePlayer.PlaybackEventListener,
 		YouTubePlayer.PlayerStateChangeListener, 
 		YouTubeThumbnailView.OnInitializedListener {
-	
-	private VideoPlayerView self = this;
+
 	private String videoIdentifier;
 	private FragmentActivity activity;
-	private RelativeLayout view;
-	private FrameLayout youtubePlayerFragmentWrapper;
+    private FrameLayout youtubePlayerFragmentWrapper;
 	private YouTubePlayerSupportFragment youtubePlayerFragment;
 	private YouTubePlayer player;
 	private Boolean youtubePlayerIsInitialized;
@@ -52,9 +51,8 @@ public class VideoPlayerView
 	private YouTubeThumbnailLoader youTubeThumbnailLoader;
 	private FrameLayout youtubeThumbnailViewWrapper;
 	private YouTubeThumbnailView youTubeThumbnailView;
-	private ImageButton playImageButton;
-	private Boolean autoplay = false;
-	
+    private Boolean autoplay = false;
+
 	public Boolean getAutoplay() {
 		return autoplay;
 	}
@@ -88,19 +86,11 @@ public class VideoPlayerView
 	public VideoPlayerView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
-	
-	public YouTubePlayerSupportFragment getYoutubePlayerFragment() {
-		return youtubePlayerFragment;
-	}
-	public void setYoutubePlayerFragment(YouTubePlayerSupportFragment youtubePlayerFragment) {
-		this.youtubePlayerFragment = youtubePlayerFragment;
-	}
+
 	public YouTubePlayer getPlayer() {
 		return player;
 	}
-	public void setPlayer(YouTubePlayer player) {
-		this.player = player;
-	}
+
 	
 	private void init() {
 		
@@ -112,7 +102,7 @@ public class VideoPlayerView
 		RelativeLayout.LayoutParams viewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		
 		LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = (RelativeLayout) inflater.inflate(R.layout.video_player_view, this, false);
+        RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.video_player_view, this, false);
 		view.setLayoutParams(viewLayoutParams);
 		
 		
@@ -124,10 +114,10 @@ public class VideoPlayerView
 		// http://stackoverflow.com/questions/19848142/how-to-load-youtubeplayer-using-youtubeplayerfragment-inside-another-fragment
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        
+
         int youtubePlayerFragmentWrapperId = R.id.youtubePlayerFragmentWrapper;
         youtubePlayerFragmentWrapper = (FrameLayout) view.findViewById(youtubePlayerFragmentWrapperId);
-     
+
         int youtubeThumbnailViewWrapperId = R.id.youtubeThumbnailViewWrapper;
         youtubeThumbnailViewWrapper = (FrameLayout) view.findViewById(youtubeThumbnailViewWrapperId);
 
@@ -135,9 +125,9 @@ public class VideoPlayerView
         youtubePlayerFragment.initialize(googleDevelopperApiKeyString, this);
         fragmentTransaction.add(youtubePlayerFragmentWrapperId, youtubePlayerFragment);
         fragmentTransaction.commit();
-        
 
-        playImageButton = (ImageButton) youtubeThumbnailViewWrapper.findViewById(R.id.playImageButton);
+
+        ImageButton playImageButton = (ImageButton) youtubeThumbnailViewWrapper.findViewById(R.id.playImageButton);
         playImageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -154,8 +144,6 @@ public class VideoPlayerView
 			hideYoutubeThumbnailViewWrapper(350, new Runnable() {
 				@Override
 				public void run() {
-					
-					Log.i("playButton player videoIdentifier", "" + videoIdentifier + " (" + self + ")");
 					player.play();
 				}
 			});
@@ -164,19 +152,19 @@ public class VideoPlayerView
 	}
 	
 	public void attachTo(ViewGroup parentView, String videoId) {
-//		Log.i("self.getParent()", "" + self.getParent());
 		
-		if (self.getParent() != null) {
-			// REMOVE PLAYER VIEW FROM PARENT VIEW
-			((ViewGroup) self.getParent()).removeView(self);
+		if (getParent() != null) {
+			// First, remove player view from parent view
+			((ViewGroup) getParent()).removeView(this);
 			
 			setVideo(videoId, false);
-			player.play();
-
+            if (player != null) {
+                player.play();
+            }
 		}
-		
-		parentView.addView(self);
-		
+
+		parentView.addView(this);
+
 	}
 	
 	public void setVideo(String videoId, Boolean animation) {
@@ -384,7 +372,7 @@ public class VideoPlayerView
 	
 	@Override
 	public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
-		Log.i("YouTubePlayer", "onInitializationSuccess - " + videoIdentifier + " (" + self + "), " + youtubePlayerFragmentWrapper + ", " + youtubeThumbnailViewWrapper);
+		Log.i("YouTubePlayer", "onInitializationSuccess - " + videoIdentifier + " (" + this + "), " + youtubePlayerFragmentWrapper + ", " + youtubeThumbnailViewWrapper);
 		
 		this.player = player;
 		this.player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
@@ -397,7 +385,7 @@ public class VideoPlayerView
 		
 		youtubePlayerIsInitialized = true;
 	}
-	
+
 	protected YouTubePlayer.Provider getYouTubePlayerProvider() {
 	    return (YouTubePlayerSupportFragment) youtubePlayerFragment;
 	}

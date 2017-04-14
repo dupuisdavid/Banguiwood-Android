@@ -92,11 +92,7 @@ public class MainActivity
 	public ArrayList<Section> getSectionsTreeData() {
 		return sectionsTreeData;
 	}
-	public void setSectionsTreeData(ArrayList<Section> sectionsTreeData) {
-		this.sectionsTreeData = sectionsTreeData;
-	}
 
-	
 	public MainActivity() {
 		super(R.string.homeActivityTitle);
 	}
@@ -316,7 +312,7 @@ public class MainActivity
 		mWindowParams.format = PixelFormat.OPAQUE;
 		mWindowParams.windowAnimations = android.R.style.Animation_Toast;
 
-		final WindowManager mWindowManager = (WindowManager) getSystemService("window");
+		WindowManager mWindowManager = (WindowManager) getSystemService("window");
 		mWindowManager.addView(splashscreenView, mWindowParams);
 
 	}
