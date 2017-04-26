@@ -39,10 +39,8 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	private Section section;
 	private Video video;
 	private RelativeLayout videoPlayerWrapperView;
-	private CustomFontTextView sectionTitleTextView;
 	private CustomFontTextView videoTitleTextView;
 	private CustomFontTextView videoPublicationDateTextView;
-	private AdView adView;
 	private LinearLayout innerVideoSuggestionsListView;
 	private ArrayList<Video> videoSuggestions;
 	
@@ -100,12 +98,10 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		rootView = (FrameLayout) inflater.inflate(R.layout.player_fragment, container, false);
 		rootView.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View arg0) {
-				return;
-			}
+			public void onClick(View view) {}
 		});
-		
-		sectionTitleTextView = (CustomFontTextView) rootView.findViewById(R.id.sectionTitleTextView);
+
+		CustomFontTextView sectionTitleTextView = (CustomFontTextView) rootView.findViewById(R.id.sectionTitleTextView);
 		sectionTitleTextView.setText(section.name);
 		videoTitleTextView = (CustomFontTextView) rootView.findViewById(R.id.videoTitleTextView);
 		videoPublicationDateTextView = (CustomFontTextView) rootView.findViewById(R.id.videoPublicationDateTextView);
@@ -171,12 +167,8 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	    int rightMargin = (int) (12 * DisplayProperties.getInstance(activity).getPixelDensity());
 	    
 	    for (int i=0; i<videoSuggestions.size(); i++) {
-	        
-//	      NSLog(@"i : %d, XPosition : %f", i, XPosition);
-	        
-	        Video video = (Video) videoSuggestions.get(i);
-	        
-//	        Log.i("setupVideoSuggestions", "" + i);
+	        Video video = videoSuggestions.get(i);
+
 	        LinearLayout.LayoutParams videoSuggestionViewLayoutParams = new LinearLayout.LayoutParams(w, h);
 	        videoSuggestionViewLayoutParams.rightMargin = rightMargin;
 	        VideoSuggestionView videoSuggestionView = new VideoSuggestionView(activity, video);
@@ -200,8 +192,8 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		
-		adView = new AdView(getContext());
+
+		AdView adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobPlayerViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);

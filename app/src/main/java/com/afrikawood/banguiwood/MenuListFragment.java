@@ -45,7 +45,7 @@ public class MenuListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
+		ArrayList<MenuItem> menuItems = new ArrayList<>();
 	
 		adapter = new MenuListAdapter(getActivity(), menuItems);
 		setListAdapter(adapter);

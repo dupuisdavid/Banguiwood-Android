@@ -197,7 +197,7 @@ public class HomeFragment extends BaseFragment {
 	    
 	    int pickNumberLimit = pickNumber > (dataList.size()) ? ((dataList.size()) - 1) : pickNumber;
 	    
-	    HashMap<String, Video> videosSuggestions = new HashMap<String, Video>();
+	    HashMap<String, Video> videosSuggestions = new HashMap<>();
 	    
 	    int count = 0;
 	    

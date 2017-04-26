@@ -1,12 +1,5 @@
 package com.afrikawood.banguiwood;
 
-import com.afrikawood.banguiwood.utils.AnimationUtilities;
-import com.afrikawood.banguiwood.utils.HandlerUtilities;
-import com.afrikawood.banguiwood.utils.Network;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -19,23 +12,28 @@ import android.view.View.OnClickListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.afrikawood.banguiwood.utils.AnimationUtilities;
+import com.afrikawood.banguiwood.utils.HandlerUtilities;
+import com.afrikawood.banguiwood.utils.Network;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
+import java.util.Locale;
+
 public class InfoActivity extends Activity {
 
-	private InfoActivity self = this;
-	@SuppressWarnings("unused")
-	private FrameLayout wrapperView;
-	private ImageButton closeButton;
-	private ProgressBar loadingProgressBar;
+	private static final String TAG = String.format(Locale.FRENCH, "[%s]", InfoActivity.class.getSimpleName());
+
+    private ProgressBar loadingProgressBar;
 	private WebView webView;
-	private AdView adView;
-	
-	public InfoActivity() {
+
+    public InfoActivity() {
 		super();
 	}
 	
@@ -44,8 +42,7 @@ public class InfoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		// Set the Above View
 		setContentView(R.layout.info_activity);
-		wrapperView = (FrameLayout) findViewById(R.id.wrapperView);
-		closeButton = (ImageButton) findViewById(R.id.closeButton);
+        ImageButton closeButton = (ImageButton) findViewById(R.id.closeButton);
 		closeButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -57,21 +54,17 @@ public class InfoActivity extends Activity {
 		loadingProgressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
 		
 		
-		if (Network.networkIsAvailable(self)) {
-			
+		if (Network.networkIsAvailable(InfoActivity.this)) {
 			HandlerUtilities.performRunnableAfterDelay(new Runnable() {
 				@Override
 				public void run() {
 					setupWebView();
-					
 				}
 			}, 350);
 			
 			// AD
 			setupAdMobBanner();
-			
 		}
-	
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -80,7 +73,7 @@ public class InfoActivity extends Activity {
 		
 		
 		String URL = "http://mobile.banguiwood.com/informations.html";
-		Log.i("URL", URL);   
+		Log.i(TAG, "URL: " + URL);
 		
 		webView = (WebView) findViewById(R.id.webView);
 		
@@ -104,7 +97,7 @@ public class InfoActivity extends Activity {
 			
 			@Override
             public boolean shouldOverrideUrlLoading(WebView view, String URL) {
-				Log.i("shouldOverrideUrlLoading", "" + URL);
+				Log.i(TAG, "shouldOverrideUrlLoading: " + URL);
 				
 				try {
 					
@@ -149,8 +142,8 @@ public class InfoActivity extends Activity {
 		
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		
-		adView = new AdView(self);
+
+        AdView adView = new AdView(InfoActivity.this);
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobInfoBannerViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);

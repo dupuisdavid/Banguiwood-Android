@@ -50,9 +50,7 @@ public class PlaylistFragment extends BaseFragment {
     private String breadCrumbs;
     private boolean forceBackButton;
 
-	private TextView breadCrumbsTextView;
 	private ProgressBar loadingProgressBar;
-	private AdView adView;
 	private int requestLoopIndex;
 	
 	private BounceListView listView;
@@ -99,8 +97,8 @@ public class PlaylistFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = (FrameLayout) inflater.inflate(R.layout.playlist_fragment, container, false);
 		rootView.setDrawingCacheEnabled(true);
-		
-		breadCrumbsTextView = (TextView) rootView.findViewById(R.id.breadCrumbsTextView);
+
+		TextView breadCrumbsTextView = (TextView) rootView.findViewById(R.id.breadCrumbsTextView);
 		breadCrumbsTextView.setText(breadCrumbs);
 		loadingProgressBar = (ProgressBar) rootView.findViewById(R.id.loadingProgressBar);
 		
@@ -209,8 +207,8 @@ public class PlaylistFragment extends BaseFragment {
 		
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		
-		adView = new AdView(getContext());
+
+		AdView adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobPlaylistViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);
@@ -249,7 +247,7 @@ public class PlaylistFragment extends BaseFragment {
 	            		
 	            		try {
 	            			
-							JSONArray videos = (JSONArray) response.getJSONArray("items");
+							JSONArray videos = response.getJSONArray("items");
 							PlaylistFragment.this.parseSectionsPlayList(videos);
 							
 
@@ -299,7 +297,7 @@ public class PlaylistFragment extends BaseFragment {
 	
 	private void parseSectionsPlayList(JSONArray data) {
 		
-		ArrayList<Section> subSections = null;
+		ArrayList<Section> subSections;
 		
 		if (requestLoopIndex == 0) {
 			if (section != null) {
@@ -324,17 +322,14 @@ public class PlaylistFragment extends BaseFragment {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
-			
 		}
-		
 	}
 	
 	private ArrayList<Video> pickVideosSuggestions(int pickNumber, String youtubeVideoIdentifier) {
 	    
 	    int pickNumberLimit = pickNumber > (dataList.size()) ? ((dataList.size()) - 1) : pickNumber;
 	    
-	    HashMap<String, Video> videosSuggestions = new HashMap<String, Video>();
+	    HashMap<String, Video> videosSuggestions = new HashMap<>();
 	    
 	    int count = 0;
 	    

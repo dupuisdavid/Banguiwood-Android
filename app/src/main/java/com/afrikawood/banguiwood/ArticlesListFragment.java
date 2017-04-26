@@ -45,10 +45,8 @@ public class ArticlesListFragment extends BaseFragment {
     private boolean forceBackButton;
 
     private FrameLayout rootView;
-	private TextView breadCrumbsTextView;
 	private ProgressBar loadingProgressBar;
-	private AdView adView;
-	
+
 	private BounceListView listView;
 	private ListAdapter listViewAdapter;
 	private ArrayList<Object> dataList;
@@ -92,8 +90,8 @@ public class ArticlesListFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = (FrameLayout) inflater.inflate(R.layout.playlist_fragment, container, false);
 		rootView.setDrawingCacheEnabled(true);
-		
-		breadCrumbsTextView = (TextView) rootView.findViewById(R.id.breadCrumbsTextView);
+
+		TextView breadCrumbsTextView = (TextView) rootView.findViewById(R.id.breadCrumbsTextView);
 		breadCrumbsTextView.setText(breadCrumbsString);
 		loadingProgressBar = (ProgressBar) rootView.findViewById(R.id.loadingProgressBar);
 		
@@ -193,8 +191,8 @@ public class ArticlesListFragment extends BaseFragment {
 		
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		
-		adView = new AdView(getContext());
+
+		AdView adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobArticleListViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);
@@ -214,11 +212,10 @@ public class ArticlesListFragment extends BaseFragment {
 		}
 		
 		if (!sectionArticlesUrl.equals("")) {
+
+			Log.i("URL", sectionArticlesUrl);
 			
-			String url = sectionArticlesUrl;
-			Log.i("URL", url);
-			
-			HttpRestClient.get(url, null, new JsonHttpResponseHandler() {
+			HttpRestClient.get(sectionArticlesUrl, null, new JsonHttpResponseHandler() {
 	            @Override
 	            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 	            	if (response != null) {
@@ -252,7 +249,7 @@ public class ArticlesListFragment extends BaseFragment {
 		
 		for (int i=0; i<data.length(); i++) {
 	        
-	        JSONObject articleDictionary = null;
+	        JSONObject articleDictionary;
 	        
 			try {
 				

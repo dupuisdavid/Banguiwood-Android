@@ -1,6 +1,7 @@
 package com.afrikawood.banguiwood;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,35 +12,27 @@ import com.afrikawood.banguiwood.business.MenuItem;
 
 import java.util.ArrayList;
 
-public class MenuListAdapter extends ArrayAdapter<MenuItem> {
-	
-	@SuppressWarnings("unused")
-	private Context context;
+class MenuListAdapter extends ArrayAdapter<MenuItem> {
+
 	private ArrayList<MenuItem> items;
 	
-	public ArrayList<MenuItem> getItems() {
+	ArrayList<MenuItem> getItems() {
 		return items;
 	}
-	public void setItems(ArrayList<MenuItem> items) {
+	void setItems(ArrayList<MenuItem> items) {
 		this.items = items;
 		this.notifyDataSetChanged();
 	}
 
 	private LayoutInflater layoutInflater;
 	
-	public MenuListAdapter(Context context, ArrayList<MenuItem> items) {
+	MenuListAdapter(Context context, ArrayList<MenuItem> items) {
 		super(context, 0);
-		
-		this.context = context;
+
 		this.items = items;
 		this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 	}
-	
-	public void addItem(final MenuItem menuItem) {
-		items.add(menuItem);
-        notifyDataSetChanged();
-    }
 	
 	@Override
 	public int getCount() {
@@ -56,16 +49,14 @@ public class MenuListAdapter extends ArrayAdapter<MenuItem> {
 		return position;
 	}
 	
-	public static class ViewHolder {
-//		ImageView icon;
+	private static class ViewHolder {
 		TextView title;
 	}
 
-	public View getView(int position, View convertView, ViewGroup parent) {
+	@NonNull
+	public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 		
-		Boolean cellRecycling = false;
-		
-		ViewHolder holder = null;
+		ViewHolder holder;
 		View view = convertView;
 		
 		// ListView with Sections/Separators
@@ -77,50 +68,29 @@ public class MenuListAdapter extends ArrayAdapter<MenuItem> {
 		final MenuItem menuItem = items.get(position);
 		
 		if (menuItem != null) {
-			
-			if (cellRecycling) {
-				
-				if (view == null) {
-					
-					if (!menuItem.isRootSection) {
-						view = layoutInflater.inflate(R.layout.row, parent, false);
-					} else {
-						view = layoutInflater.inflate(R.layout.section_row, parent, false);
-					}
-					
-//					ImageView icon = (ImageView) view.findViewById(R.id.row_icon);
-					TextView title = (TextView) view.findViewById(R.id.row_title);
-					
-					holder = new ViewHolder();
-//					holder.icon = icon;
-					holder.title = title;
-					
-					view.setTag(holder);
-					
-				} else {
-					
-					holder = (ViewHolder) view.getTag();
-					
-				}
-				
-				
-//				holder.icon.setImageResource(getItem(position).getIconRes());
-				holder.title.setText(getItem(position).tag);
-				
-			} else {
-			
+			if (view == null) {
+
 				if (!menuItem.isRootSection) {
 					view = layoutInflater.inflate(R.layout.row, parent, false);
 				} else {
 					view = layoutInflater.inflate(R.layout.section_row, parent, false);
 				}
-				
-	//			ImageView icon = (ImageView) view.findViewById(R.id.row_icon);
+
 				TextView title = (TextView) view.findViewById(R.id.row_title);
-				
-				title.setText(getItem(position).tag);
+
+				holder = new ViewHolder();
+				holder.title = title;
+
+				view.setTag(holder);
+
+			} else {
+
+				holder = (ViewHolder) view.getTag();
+
 			}
 
+
+			holder.title.setText(menuItem.tag);
 		}
 		
 		return view;

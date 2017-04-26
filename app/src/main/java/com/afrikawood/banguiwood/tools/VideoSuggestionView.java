@@ -20,21 +20,11 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class VideoSuggestionView extends FrameLayout {
-	
-	private VideoSuggestionView self;
+
 	private Context context;
-	private RelativeLayout view;
 	private ImageView imageView;
-	private CustomFontTextView titleTextView;
 	private Video video;
 	private VideoSuggestionViewDelegate delegate;
-	private ImageLoader imageLoader;
-	private DisplayImageOptions options;
-	
-	public VideoSuggestionViewDelegate getDelegate() {
-		return delegate;
-	}
-
 	public void setDelegate(VideoSuggestionViewDelegate delegate) {
 		this.delegate = delegate;
 	}
@@ -43,7 +33,7 @@ public class VideoSuggestionView extends FrameLayout {
 	// INTERFACES
 	// ********************************************************************
 
-	public static interface VideoSuggestionViewDelegate {
+	public interface VideoSuggestionViewDelegate {
 		void didTapVideoSuggestionView(VideoSuggestionView view, Video video);
 	}
 
@@ -64,25 +54,25 @@ public class VideoSuggestionView extends FrameLayout {
 	}
 	
 	private void init() {
-		
-		this.imageLoader = ImageLoader.getInstance();
-		this.options = new DisplayImageOptions.Builder()
-			.cacheInMemory(false)
-			.cacheOnDisk(false)
-			.considerExifParams(false)
-			.build();
+
+		ImageLoader imageLoader = ImageLoader.getInstance();
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheInMemory(false)
+				.cacheOnDisk(false)
+				.considerExifParams(false)
+				.build();
 		
 		FrameLayout.LayoutParams viewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = (RelativeLayout) inflater.inflate(R.layout.suggestion_view, this, false);
+		RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.suggestion_view, this, false);
 		view.setLayoutParams(viewLayoutParams);
 		view.setBackgroundColor(0xffeeeeee);
 		view.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (delegate != null) {
-					delegate.didTapVideoSuggestionView(self, video);
+					delegate.didTapVideoSuggestionView(VideoSuggestionView.this, video);
 				}
 			}
 		});
@@ -112,10 +102,10 @@ public class VideoSuggestionView extends FrameLayout {
 				public void onLoadingCancelled(String arg0, View arg1) {}
 			});
 			
-		} else {}
-		
-		
-		titleTextView = (CustomFontTextView) view.findViewById(R.id.titleTextView);
+		}
+
+
+		CustomFontTextView titleTextView = (CustomFontTextView) view.findViewById(R.id.titleTextView);
 		titleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(video.getTitle()));
 		
 		

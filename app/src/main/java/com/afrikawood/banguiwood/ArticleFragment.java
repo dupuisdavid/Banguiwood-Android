@@ -38,9 +38,8 @@ public class ArticleFragment extends BaseFragment {
     private FrameLayout rootView;
 	private ProgressBar loadingProgressBar;
 	private WebView webView;
-	AdView adView;
 
-    private static final String ARG_ARTICLE = "article";
+	private static final String ARG_ARTICLE = "article";
     private static final String ARG_SECTION = "section";
     private static final String ARG_FORCE_BACK_BUTTON = "forceBackButton";
 
@@ -191,8 +190,8 @@ public class ArticleFragment extends BaseFragment {
 		
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		
-		adView = new AdView(getContext());
+
+		AdView adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobArticleViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);

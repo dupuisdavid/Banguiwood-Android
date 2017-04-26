@@ -16,11 +16,8 @@ import com.afrikawood.banguiwood.tools.BaseFragment.ButtonType;
 
 public class CustomActionBarView extends RelativeLayout {
 
-	@SuppressWarnings("unused")
-	private CustomActionBarView self = this;
 	private FragmentActivity context;
-	private RelativeLayout view;
-	
+
 	public Button backButton;
 	public ImageButton customLeftButton;
 	public ImageButton slideRightMenuButton;
@@ -52,7 +49,7 @@ public class CustomActionBarView extends RelativeLayout {
 		RelativeLayout.LayoutParams viewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = (RelativeLayout) inflater.inflate(R.layout.custom_actionbar_view, this, false);
+		RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.custom_actionbar_view, this, false);
 		view.setLayoutParams(viewLayoutParams);
 		view.setBackgroundColor(0x00ffcc00);
 		
