@@ -107,7 +107,7 @@ public class ArticlesListFragment extends BaseFragment {
 					
 					@Override
 					public void run() {
-						requestForSectionArticlesItems(section.getUrl(), new Runnable() {
+						requestForSectionArticlesItems(section.url, new Runnable() {
 							@Override
 							public void run() {
 								Log.i("Success", "Success");

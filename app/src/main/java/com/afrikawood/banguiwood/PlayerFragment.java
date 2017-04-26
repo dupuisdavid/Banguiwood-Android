@@ -59,7 +59,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 			@Override
 			public void run() {
 				Log.i("SHARE", "CLICK");
-                ((MainActivity) getActivity()).openShareDialog(PlayerFragment.this.video.getTitle(), getUrlToShare());
+                ((MainActivity) getActivity()).openShareDialog(PlayerFragment.this.video.title, getUrlToShare());
 			}
 		});
 		
@@ -75,9 +75,9 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 		
 		if (!section.websiteCategoryRootUrl.equals("")) {
 			urlToShare = urlToShare + section.websiteCategoryRootUrl;
-			urlToShare = urlToShare + String.format(Locale.FRENCH, "youtubegallery?videoid=%s", video.getYoutubeVideoIdentifier());
+			urlToShare = urlToShare + String.format(Locale.FRENCH, "youtubegallery?videoid=%s", video.youtubeVideoIdentifier);
 		} else {
-			urlToShare = String.format(Locale.FRENCH, "https://www.youtube.com/watch?v=%s", video.getYoutubeVideoIdentifier());
+			urlToShare = String.format(Locale.FRENCH, "https://www.youtube.com/watch?v=%s", video.youtubeVideoIdentifier);
 		}
 		
 		return urlToShare;
@@ -123,15 +123,15 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	}
 	
 	public void setVideoInformations(Video video) {
-		videoTitleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(video.getTitle()));
-		videoPublicationDateTextView.setText(String.format(getContext().getResources().getString(R.string.textPublishedAt), DateUtilities.convertDateToString(video.getPublicationDate(), getContext().getResources().getString(R.string.displayedPublicationDateFormat))));
+		videoTitleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(video.title));
+		videoPublicationDateTextView.setText(String.format(getContext().getResources().getString(R.string.textPublishedAt), DateUtilities.convertDateToString(video.publicationDate, getContext().getResources().getString(R.string.displayedPublicationDateFormat))));
 	}
 	
 	public void setupYoutubePlayerFragment() {
 		
 		if (video != null) {
 			
-			final String videoIdentifier = video.getYoutubeVideoIdentifier();
+			final String videoIdentifier = video.youtubeVideoIdentifier;
 			
 			if (!videoIdentifier.equals("")) {
 				if (videoPlayerWrapperView == null) {
@@ -150,10 +150,8 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 			videoPlayerWrapperView.setVisibility(View.GONE);
 			
 		}
-		
 	}
 
-	
 	private void setupVideoSuggestions() {
 		
 		if (videoSuggestions == null) {
@@ -181,7 +179,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	@Override
 	public void didTapVideoSuggestionView(VideoSuggestionView view, Video video) {
 		setVideoInformations(video);
-        ((MainActivity) getActivity()).videoPlayerView.setVideo(video.getYoutubeVideoIdentifier(), false);
+        ((MainActivity) getActivity()).videoPlayerView.setVideo(video.youtubeVideoIdentifier, false);
 	}
 	
 	public void setupAdMobBanner() {
@@ -217,7 +215,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 	    Log.i("" + this.getClass(), "onStart");
 	    
 	    if (section != null && !section.name.equals("")) {
-            ((MainActivity) getActivity()).trackView(String.format("%s/%s", section.name, video.getTitle()));
+            ((MainActivity) getActivity()).trackView(String.format("%s/%s", section.name, video.title));
 	    }
 	}
 	

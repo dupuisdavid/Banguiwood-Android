@@ -46,7 +46,7 @@ public class Section implements Parcelable {
 		byte isRootSectionVal = in.readByte();
 		isRootSection = isRootSectionVal == 0x02 ? null : isRootSectionVal != 0x00;
 		if (in.readByte() == 0x01) {
-			sections = new ArrayList<Section>();
+			sections = new ArrayList<>();
 			in.readList(sections, Section.class.getClassLoader());
 		} else {
 			sections = null;

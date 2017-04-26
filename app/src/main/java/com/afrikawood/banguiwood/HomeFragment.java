@@ -57,7 +57,6 @@ public class HomeFragment extends BaseFragment {
 	private ScrollView scrollView;
 	private RelativeLayout videoPlayerWrapperView;
 	private ProgressBar loadingProgressBar;
-	private AdView adView;
 	private int requestLoopIndex;
 	
 	private BounceListView listView;
@@ -129,7 +128,7 @@ public class HomeFragment extends BaseFragment {
 					@Override
 					public void run() {
 						
-						requestForSectionPlayListItems(section.getYoutubePlaylistIdentifier(), new Runnable() {
+						requestForSectionPlayListItems(section.youtubePlaylistIdentifier, new Runnable() {
 							@Override
 							public void run() {
 								Log.i("Success", "Success");
@@ -214,7 +213,7 @@ public class HomeFragment extends BaseFragment {
 			
 			if (data instanceof Video) {
 				Video pickVideo = (Video) data;
-				String videoKey = pickVideo.getYoutubeVideoIdentifier();
+				String videoKey = pickVideo.youtubeVideoIdentifier;
 				
 				if (!videosSuggestions.containsKey(videoKey) && !videoKey.equals(youtubeVideoIdentifier)) {
 					videosSuggestions.put(videoKey, pickVideo);
@@ -240,7 +239,7 @@ public class HomeFragment extends BaseFragment {
 		
 		if (topVideo != null) {
 			
-			final String videoIdentifier = topVideo.getYoutubeVideoIdentifier();
+			final String videoIdentifier = topVideo.youtubeVideoIdentifier;
 			
 			if (!videoIdentifier.equals("")) {
                 ((MainActivity) getActivity()).setupYoutubePlayerFragment(videoIdentifier, videoPlayerWrapperView);
@@ -263,8 +262,8 @@ public class HomeFragment extends BaseFragment {
 		}
 		
 		
-		videoTitleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(topVideo.getTitle()));
-		videoPublicationDateTextView.setText(String.format(getContext().getResources().getString(R.string.textPublishedAt), DateUtilities.convertDateToString(topVideo.getPublicationDate(), getContext().getResources().getString(R.string.displayedPublicationDateFormat))));
+		videoTitleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(topVideo.title));
+		videoPublicationDateTextView.setText(String.format(getContext().getResources().getString(R.string.textPublishedAt), DateUtilities.convertDateToString(topVideo.publicationDate, getContext().getResources().getString(R.string.displayedPublicationDateFormat))));
 		
 	}
 	
@@ -405,7 +404,7 @@ public class HomeFragment extends BaseFragment {
                 	Video video = (Video) data;
 
                     if (getActivity() instanceof MainActivity) {
-                        PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.getYoutubeVideoIdentifier()));
+                        PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.youtubeVideoIdentifier));
                         MainActivity mainActivity = (MainActivity) getActivity();
                         mainActivity.switchContent(fragment, true);
                     }
@@ -423,8 +422,8 @@ public class HomeFragment extends BaseFragment {
 		
 		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		
-		adView = new AdView(getContext());
+
+		AdView adView = new AdView(getContext());
 		adView.setLayoutParams(adViewLayoutParams);
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobHomeBannerViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);

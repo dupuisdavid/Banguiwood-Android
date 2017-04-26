@@ -114,7 +114,7 @@ public class PlaylistFragment extends BaseFragment {
 					
 					@Override
 					public void run() {
-						requestForSectionPlayListItems(section.getYoutubePlaylistIdentifier(), new Runnable() {
+						requestForSectionPlayListItems(section.youtubePlaylistIdentifier, new Runnable() {
 							@Override
 							public void run() {
 								Log.i("Success", "Success");
@@ -189,7 +189,7 @@ public class PlaylistFragment extends BaseFragment {
                 	Video video = (Video) data;
 
 					if (getActivity() instanceof MainActivity) {
-						PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.getYoutubeVideoIdentifier()));
+						PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.youtubeVideoIdentifier));
 						MainActivity mainActivity = (MainActivity) getActivity();
 						mainActivity.switchContent(fragment, true);
 					}
@@ -346,7 +346,7 @@ public class PlaylistFragment extends BaseFragment {
 			
 			if (data instanceof Video) {
 				Video pickVideo = (Video) data;
-				String videoKey = pickVideo.getYoutubeVideoIdentifier();
+				String videoKey = pickVideo.youtubeVideoIdentifier;
 				
 				if (!videosSuggestions.containsKey(videoKey) && !videoKey.equals(youtubeVideoIdentifier)) {
 					videosSuggestions.put(videoKey, pickVideo);

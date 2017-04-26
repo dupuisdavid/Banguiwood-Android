@@ -45,7 +45,7 @@ public class Article implements Parcelable {
 		return item;
 	}
 
-	protected Article(Parcel in) {
+	private Article(Parcel in) {
 		title = in.readString();
 		thumbnailUrl = in.readString();
 		url = in.readString();

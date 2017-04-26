@@ -61,14 +61,6 @@ public class ListAdapter extends BaseAdapter {
 		
 		this.imageLoader = ImageLoader.getInstance();
 	}
-	
-	public Boolean getImageViewFadeRefreshEnable() {
-		return imageViewFadeRefreshEnable;
-	}
-
-	public void setImageViewFadeRefreshEnable(Boolean imageViewFadeRefreshEnable) {
-		this.imageViewFadeRefreshEnable = imageViewFadeRefreshEnable;
-	}
 
 	@Override
 	public int getCount() {
@@ -85,10 +77,9 @@ public class ListAdapter extends BaseAdapter {
 		return position;
 	}
 	
-	public class ViewHolder {
+	private class ViewHolder {
 		ImageView imageView;
 		TextView titleTextView;
-		TextView categoryNameTextView;
 		TextView publicationDateTextView;
 		Object data;
 	}
@@ -117,11 +108,8 @@ public class ListAdapter extends BaseAdapter {
 			convertView.setBackgroundColor(Color.parseColor(context.getResources().getString(R.string.listItemBackgroundAlternateColor)));
 			holder.publicationDateTextView.setTextColor(Color.parseColor(context.getResources().getString(R.string.listItemDateLabelAlternateColor)));
 		}
-		
 
-		
 		// GET DATA
-		
 		Object data = this.data.get(position);
 		
 		// VIDEO ROW CASE
@@ -139,7 +127,7 @@ public class ListAdapter extends BaseAdapter {
 				holder.data = video;
 //				Log.i("position", "position : " + position);
 				
-				updateVideoOrArticleHolder(holder, video.getTitle(), video.getHighThumbnailURL(), DateUtilities.convertDateToString(video.getPublicationDate(), context.getResources().getString(R.string.displayedPublicationDateFormat)));
+				updateVideoOrArticleHolder(holder, video.title, video.highThumbnailURL, DateUtilities.convertDateToString(video.publicationDate, context.getResources().getString(R.string.displayedPublicationDateFormat)));
 				
 			}
 		
@@ -239,9 +227,6 @@ public class ListAdapter extends BaseAdapter {
 			if (imageViewFadeRefreshEnable) {
 				AnimationUtilities.fadeIn(holder.imageView, null);
 			}
-			
 		}
-		
 	}
-
 }

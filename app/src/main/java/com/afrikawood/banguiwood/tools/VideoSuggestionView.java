@@ -79,7 +79,7 @@ public class VideoSuggestionView extends FrameLayout {
 		addView(view);
 		
 		imageView = (ImageView) view.findViewById(R.id.imageView);
-		String imageUrl = video.getHighThumbnailURL();
+		String imageUrl = video.highThumbnailURL;
 //		Log.i("imageUrl", "imageUrl : " + imageUrl);
 //		imageUrl = "http://radboudreshapecenter.com/wp-content/uploads/2014/08/4562-thumb.jpg";
 		
@@ -106,7 +106,7 @@ public class VideoSuggestionView extends FrameLayout {
 
 
 		CustomFontTextView titleTextView = (CustomFontTextView) view.findViewById(R.id.titleTextView);
-		titleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(video.getTitle()));
+		titleTextView.setText(StringUtilities.purgeUnwantedSpaceInText(video.title));
 		
 		
 	}

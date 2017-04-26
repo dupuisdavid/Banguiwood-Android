@@ -58,11 +58,11 @@ public class MenuListFragment extends ListFragment {
 		for (int i = 0; i < sections.size(); i++) {
 			
 			Section section = sections.get(i);
-			menuItems.add(new MenuItem(section.name, android.R.drawable.ic_menu_search, true, -1, i));
+			menuItems.add(new MenuItem(section.name, true, -1, i));
 			
 			for (int j = 0; j < section.sections.size(); j++) {
 				Section subSection = section.sections.get(j);
-				menuItems.add(new MenuItem(subSection.name, android.R.drawable.ic_menu_search, false, i, j));
+				menuItems.add(new MenuItem(subSection.name, false, i, j));
 			}
 		}
 

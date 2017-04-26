@@ -393,14 +393,14 @@ public class MainActivity
 					section = new SectionPlaylist();
 					
 					if (data.has("youtubePlaylistID")) {
-						((SectionPlaylist) section).setYoutubePlaylistIdentifier(data.getString("youtubePlaylistID"));
+						((SectionPlaylist) section).youtubePlaylistIdentifier = data.getString("youtubePlaylistID");
 					}
 					
 				} else if (sectionType == SectionType.SectionTypeArticles) {
 					section = new SectionArticles();
 					
 					if (data.has("articlesURL")) {
-						((SectionArticles) section).setUrl(data.getString("articlesURL"));
+						((SectionArticles) section).url = data.getString("articlesURL");
 					}
 					
 				}
