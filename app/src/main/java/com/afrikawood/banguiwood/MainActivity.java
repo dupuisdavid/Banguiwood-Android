@@ -1,12 +1,7 @@
 package com.afrikawood.banguiwood;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -55,6 +50,13 @@ import com.google.analytics.tracking.android.Tracker;
 import com.google.android.gms.plus.PlusShare;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
 import cz.msebera.android.httpclient.Header;
 
 public class MainActivity 
@@ -62,14 +64,13 @@ public class MainActivity
 		BaseActivity 
 	implements 
 		HomeFragmentDelegate {
-	
-	private MainActivity self = this;
+
+	private static final String TAG = String.format(Locale.FRENCH, "[%s]", MainActivity.class.getSimpleName());
+
 	private Fragment currentContentFragment;
-	private ArrayList<Fragment> contentFragments = new ArrayList<Fragment>();
+	private ArrayList<Fragment> contentFragments = new ArrayList<>();
 	private int lastSavedBackStackEntryCount = 0;
-	@SuppressWarnings("unused")
-	private FrameLayout wrapperView;
-	public SplashscreenView splashscreenView;
+    public SplashscreenView splashscreenView;
 	public VideoPlayerView videoPlayerView;
 	public ArrayList<Section> sectionsTreeData;
 	public MenuListFragment menuListFragment;
@@ -102,45 +103,6 @@ public class MainActivity
 		super.onCreate(savedInstanceState);
 		// Set the Above View
 		setContentView(R.layout.main_activity);
-		wrapperView = (FrameLayout) findViewById(R.id.wrapperView);
-		
-		Intent intent = getIntent();
-		Bundle bundle = intent.getExtras();
-		
-		if (bundle != null) {
-//			Log.i("bundle", "" + bundle);
-			
-// 			{"alert": "Nouvelles vidéos disponible sur Banguiwood !", "sound":"", "youtubeId": "JzsdNKF8Mlw"}
-			
-			for (String key : bundle.keySet()) {
-		        Log.i("bundle", key + " = " + (bundle.get(key) instanceof String ? bundle.get(key) : bundle.get(key)));
-			}
-			
-			try {
-				
-				String parseDataKey = "com.parse.Data";
-				JSONObject parseJsonData = bundle.containsKey(parseDataKey) ? new JSONObject(bundle.getString(parseDataKey)) : null;
-				String youtubeVideoIdKey = "youtubeId";
-				String youtubeVideoId = null;
-				
-				if (parseJsonData != null) {
-					if (parseJsonData.has(youtubeVideoIdKey)) {
-						youtubeVideoId = parseJsonData.getString(youtubeVideoIdKey);
-					}
-				}
-				
-				String parseChannelKey = "com.parse.Channel";
-				@SuppressWarnings("unused")
-				String parseChannel = bundle.containsKey(parseChannelKey) ? bundle.getString(parseChannelKey) : null;
-				
-				
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			Log.i("bundle", "no bundle");
-		}
 		
 		// FACEBOOK HELPER
 		uiHelper = new UiLifecycleHelper(this, null);
@@ -229,7 +191,7 @@ public class MainActivity
     			}
     		} 
     		
-//    		Log.i("currentContentFragment.getClass()", "" + currentContentFragment.getClass());
+//    		Log.i(TAG, "" + currentContentFragment.getClass());
     		
     		if (currentContentFragment instanceof HomeFragment) {
     			HomeFragment homeFragment = (HomeFragment) currentContentFragment;
@@ -237,14 +199,14 @@ public class MainActivity
     		}
     		
     		lastSavedBackStackEntryCount = (lastSavedBackStackEntryCount - 1);
-//    		Log.i("onBackStackChanged [REMOVE]", "onBackStackChanged " + backStackEntryCount + ", " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
+//    		Log.i(TAG, "onBackStackChanged " + backStackEntryCount + ", " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
     		
     	// FRAGMENT AS BEEN PUSHED
     	} else {
     		
     		lastSavedBackStackEntryCount = (lastSavedBackStackEntryCount + 1);
     		fragmentAdded = true;
-//    		Log.i("onBackStackChanged [ADD]", "onBackStackChanged " + backStackEntryCount + ", " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
+//    		Log.i(TAG, "onBackStackChanged " + backStackEntryCount + ", " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
     	}
     	
 
@@ -254,7 +216,7 @@ public class MainActivity
     	int fragmentIndex = (lastSavedBackStackEntryCount - 1);
     	fragmentIndex = backStackEntryCount - 1;
     	
-    	Log.i("onBackStackChanged", "backStackEntryCount : " + backStackEntryCount + ", lastSavedBackStackEntryCount ("+ contentFragments.size() +")) : " + lastSavedBackStackEntryCount + ", currentContentFragment : " + currentContentFragment + ", fragmentIndex : " + fragmentIndex);
+    	Log.i(TAG, "backStackEntryCount : " + backStackEntryCount + ", lastSavedBackStackEntryCount ("+ contentFragments.size() +")) : " + lastSavedBackStackEntryCount + ", currentContentFragment : " + currentContentFragment + ", fragmentIndex : " + fragmentIndex);
     	
     	// FRAGMENT_INDEX BECOME -1... WHY ?
     	
@@ -263,14 +225,14 @@ public class MainActivity
     		if (fragmentIndex > -1 && contentFragments.get(fragmentIndex) != null && contentFragments.get(fragmentIndex) instanceof BaseFragment) {
     			currentFragment = (BaseFragment) contentFragments.get(fragmentIndex);
     			if (currentFragment != null) {
-    				Log.i("onBackStackChanged " + (fragmentAdded ? "[ADD]" : "[REMOVE]"), "" + contentFragments.get(fragmentIndex).getClass() + ", " + currentFragment.getActionBarLeftButtonType());
+    				Log.i(TAG, "" + contentFragments.get(fragmentIndex).getClass() + ", " + currentFragment.getActionBarLeftButtonType());
             		getCustomActionBarView().updateActionBarButtonsAccordingToFragment(currentFragment);
     			}
         		
     		}
     		
     	} else {    		
-    		Log.i("MainActivity", "contentFragments error (Invalid index 0, size is 0)");
+    		Log.i(TAG, "contentFragments error (Invalid index 0, size is 0)");
     	}
 
 	}
@@ -289,7 +251,7 @@ public class MainActivity
 	
 	private void setupAndOpenSplashscreenView() {
 		
-		Log.i("setupSplashscreenView", "setupSplashscreenView");
+		Log.i(TAG, "setupSplashscreenView");
 		
 
 		FrameLayout.LayoutParams splashscreenViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -312,14 +274,14 @@ public class MainActivity
 		mWindowParams.format = PixelFormat.OPAQUE;
 		mWindowParams.windowAnimations = android.R.style.Animation_Toast;
 
-		WindowManager mWindowManager = (WindowManager) getSystemService("window");
+		WindowManager mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		mWindowManager.addView(splashscreenView, mWindowParams);
 
 	}
 	
 	private void closeAndDestroySplashscreen() {
 		
-		WindowManager mWindowManager = (WindowManager) getSystemService("window");
+		WindowManager mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		mWindowManager.removeView(splashscreenView);
 	}
 	
@@ -358,7 +320,7 @@ public class MainActivity
             
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-            	Log.i("response", "" + response.length());
+            	Log.i(TAG, "response: " + response.length());
             	parseRootSectionsTreeWithJSONArrayData(response, completionRunnable);
             }
             
@@ -373,7 +335,7 @@ public class MainActivity
 	private void parseRootSectionsTreeWithJSONArrayData(JSONArray arrayData, final Runnable completionRunnable) {
 		
 		if (sectionsTreeData == null) {
-			sectionsTreeData = new ArrayList<Section>();
+			sectionsTreeData = new ArrayList<>();
 		}
 		
 		if (sectionsTreeData.size() > 0) {
@@ -465,7 +427,7 @@ public class MainActivity
 					arrows = arrows + ">";
 				}
 				
-//				Log.i("parseSectionWithJSONArrayData", ">"+ arrows +" "+ section.getName() +" [" + treeDeepIndex + "]" + "(parent : " + parentSection.getName() + ")");
+//				Log.i(TAG, ">"+ arrows +" "+ section.getName() +" [" + treeDeepIndex + "]" + "(parent : " + parentSection.getName() + ")");
 				
 				
 				if (data.has("categories")) {
@@ -514,14 +476,14 @@ public class MainActivity
 		}
 		
 		if (videoPlayerView.getParent() != videoPlayerViewWrapper) {
-			Log.i("videoPlayerView", "attachTo");
+			Log.i(TAG, "videoPlayerView - attachTo");
 			if (videoPlayerView != null) {
 				videoPlayerView.setAutoplay(autoplay);
 				videoPlayerView.attachTo(videoPlayerViewWrapper, videoID);
 			}
 			
 		} else {
-			Log.i("videoPlayerView", "attachTo not needed");
+			Log.i(TAG, "videoPlayerView - attachTo not needed");
 		}
 		
 	}
@@ -604,12 +566,12 @@ public class MainActivity
 	    	uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
 		        @Override
 		        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-		            Log.e("Activity", String.format("Error: %s", error.toString()));
+		            Log.e(TAG, String.format("Error: %s", error.toString()));
 		        }
 
 		        @Override
 		        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-		            Log.i("Activity", "Success!");
+		            Log.i(TAG, "Success!");
 		        }
 		    });
 	    }
@@ -620,12 +582,12 @@ public class MainActivity
 		super.onNewIntent(null);
         
         if (intent != null) {
-        	Log.i("intent onNewIntent", "" + intent + ", flags : " + intent.getFlags() + ", action : " + intent.getAction() + ", scheme : " + intent.getScheme());
+        	Log.i(TAG, "" + intent + ", flags : " + intent.getFlags() + ", action : " + intent.getAction() + ", scheme : " + intent.getScheme());
         	Bundle bundle = intent.getExtras();
-        	Log.i("bundle onNewIntent", "" + bundle);
+        	Log.i(TAG, "" + bundle);
         	Uri uri = intent.getData();
         	String uriString = intent.getDataString();
-        	Log.i("uriString onNewIntent", "" + uri + ", " + uriString);
+        	Log.i(TAG, "" + uri + ", " + uriString);
         	
         	HandlerUtilities.performRunnableAfterDelay(new Runnable() {
 				@Override
@@ -637,15 +599,10 @@ public class MainActivity
         }
     	
     }
-	
-	
-	public void switchContent(Fragment fragment) {
-		switchContent(fragment, false);
-	}
-	
+
 	public void switchContent(final Fragment fragment, final Boolean addFragment) {
 		
-		Log.i("switchContent", "addFragment : " + addFragment);
+		Log.i(TAG, "switchContent - addFragment : " + addFragment);
 		
 		if (!addFragment) {
 			getSlidingMenu().showContent();
@@ -676,7 +633,7 @@ public class MainActivity
 					
 				} else {
 					
-					Log.i("switchContent A", "backStackEntryCount : " + fm.getBackStackEntryCount() + ", lastSavedBackStackEntryCount : " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
+					Log.i(TAG, "backStackEntryCount : " + fm.getBackStackEntryCount() + ", lastSavedBackStackEntryCount : " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
 			    	
 /*
 					int backStackCount = fm.getBackStackEntryCount();
@@ -690,7 +647,7 @@ public class MainActivity
 					}
 */
 					
-//					Log.i("contentFragments.size()", "" + contentFragments.size());
+//					Log.i(TAG, "contentFragments.size: " + contentFragments.size());
 								
 /*
 					for (int i = 0; i < contentFragments.size(); i++) {
@@ -698,7 +655,7 @@ public class MainActivity
 						
 						if (currentFragment != null) {
 							ft.remove(currentFragment);
-							Log.i("Remove fragment", "" + currentFragment.getClass());
+							Log.i(TAG, "Remove fragment: " + currentFragment.getClass());
 						}
 					}
 */
@@ -715,7 +672,7 @@ public class MainActivity
 					lastSavedBackStackEntryCount = 0;
 					contentFragments.clear();
 					
-					Log.i("switchContent B", "backStackEntryCount : " + fm.getBackStackEntryCount() + ", lastSavedBackStackEntryCount : " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
+					Log.i(TAG, "B - backStackEntryCount : " + fm.getBackStackEntryCount() + ", lastSavedBackStackEntryCount : " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
 			    	
 					ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
 					ft.replace(R.id.fragment_container, fragment);
@@ -725,7 +682,7 @@ public class MainActivity
 					currentContentFragment = fragment;
 //					lastSavedBackStackEntryCount = (lastSavedBackStackEntryCount + 1);
 					
-					Log.i("switchContent C", "backStackEntryCount : " + fm.getBackStackEntryCount() + ", lastSavedBackStackEntryCount : " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
+					Log.i(TAG, "C - backStackEntryCount : " + fm.getBackStackEntryCount() + ", lastSavedBackStackEntryCount : " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
 			    	
 					
 					getCustomActionBarView().updateActionBarButtonsAccordingToFragment((BaseFragment) fragment);
@@ -748,6 +705,8 @@ public class MainActivity
 			getResources().getString(R.string.textGooglePlus),
         	getResources().getString(R.string.textCancel)
         };
+
+        final Resources resources = getResources();
 	
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         
@@ -767,13 +726,13 @@ public class MainActivity
 		        
     			switch (action) {
     				case 0:
-    					shareOnFacebook(title, uri);
+    					shareOnFacebook(uri);
     					break;
     				case 1:
     					if (twitterShareManager != null) {
     						twitterShareManager.share(title +  "\n" + uri);
     					} else {
-    						AlertDialogBuilder.build(self, self.getResources().getString(R.string.uiAlertViewTitle), self.getResources().getString(R.string.textErrorOccursShareImpossible));
+    						AlertDialogBuilder.build(MainActivity.this, resources.getString(R.string.uiAlertViewTitle), resources.getString(R.string.textErrorOccursShareImpossible));
     					}
     					
     					break;
@@ -791,7 +750,7 @@ public class MainActivity
 		
 	}
 	
-	private void shareOnFacebook(final String title, final String uri) {
+	private void shareOnFacebook(final String uri) {
     	
     	final Resources resources = getResources();
     	
