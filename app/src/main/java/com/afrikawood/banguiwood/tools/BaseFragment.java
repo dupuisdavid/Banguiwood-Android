@@ -9,7 +9,7 @@ import com.afrikawood.banguiwood.utils.FragmentUtils;
 
 public class BaseFragment extends Fragment {
 	
-	public static enum ButtonType {
+	protected enum ButtonType {
         NONE,
         BACK,
         MENU
@@ -19,38 +19,6 @@ public class BaseFragment extends Fragment {
 	private ButtonType actionBarRightButtonType;
 	private CustomActionBarButtonConfiguration actionBarCustomLeftButtonConfiguration;
 	private CustomActionBarButtonConfiguration actionBarCustomRightButtonConfiguration;
-	
-	public ButtonType getActionBarLeftButtonType() {
-		return actionBarLeftButtonType;
-	}
-	
-	public ButtonType getActionBarRightButtonType() {
-		return actionBarRightButtonType;
-	}
-	
-	public void setActionBarLeftButtonType(ButtonType actionBarLeftButtonType) {
-		this.actionBarLeftButtonType = actionBarLeftButtonType;
-	}
-	
-	public void setActionBarRightButtonType(ButtonType actionBarRightButtonType) {
-		this.actionBarRightButtonType = actionBarRightButtonType;
-	}
-
-	public CustomActionBarButtonConfiguration getActionBarCustomLeftButtonConfiguration() {
-		return actionBarCustomLeftButtonConfiguration;
-	}
-
-	public void setActionBarCustomLeftButtonConfiguration(CustomActionBarButtonConfiguration actionBarCustomLeftButtonConfiguration) {
-		this.actionBarCustomLeftButtonConfiguration = actionBarCustomLeftButtonConfiguration;
-	}
-	
-	public CustomActionBarButtonConfiguration getActionBarCustomRightButtonConfiguration() {
-		return actionBarCustomRightButtonConfiguration;
-	}
-
-	public void setActionBarCustomRightButtonConfiguration(CustomActionBarButtonConfiguration actionBarCustomRightButtonConfiguration) {
-		this.actionBarCustomRightButtonConfiguration = actionBarCustomRightButtonConfiguration;
-	}
 
 	@Override
 	public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
@@ -87,7 +55,7 @@ public class BaseFragment extends Fragment {
 	            
 	            @Override
 	            public void onAnimationRepeat(Animation animation) {
-	            	
+
 	            }
 	            
 	            @Override
@@ -100,10 +68,37 @@ public class BaseFragment extends Fragment {
 	    }
 	   
 	    return null;
-	} 
-	
-	
-	
-	
+	}
 
+	public ButtonType getActionBarLeftButtonType() {
+		return actionBarLeftButtonType;
+	}
+
+	public ButtonType getActionBarRightButtonType() {
+		return actionBarRightButtonType;
+	}
+
+	public void setActionBarLeftButtonType(ButtonType actionBarLeftButtonType) {
+		this.actionBarLeftButtonType = actionBarLeftButtonType;
+	}
+
+	public void setActionBarRightButtonType(ButtonType actionBarRightButtonType) {
+		this.actionBarRightButtonType = actionBarRightButtonType;
+	}
+
+	public CustomActionBarButtonConfiguration getActionBarCustomLeftButtonConfiguration() {
+		return actionBarCustomLeftButtonConfiguration;
+	}
+
+	public void setActionBarCustomLeftButtonConfiguration(CustomActionBarButtonConfiguration actionBarCustomLeftButtonConfiguration) {
+		this.actionBarCustomLeftButtonConfiguration = actionBarCustomLeftButtonConfiguration;
+	}
+
+	public CustomActionBarButtonConfiguration getActionBarCustomRightButtonConfiguration() {
+		return actionBarCustomRightButtonConfiguration;
+	}
+
+	public void setActionBarCustomRightButtonConfiguration(CustomActionBarButtonConfiguration actionBarCustomRightButtonConfiguration) {
+		this.actionBarCustomRightButtonConfiguration = actionBarCustomRightButtonConfiguration;
+	}
 }

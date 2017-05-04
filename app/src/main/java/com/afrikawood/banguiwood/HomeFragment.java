@@ -80,22 +80,20 @@ public class HomeFragment extends BaseFragment {
 		
 		this.section = section;
 	
-		CustomActionBarButtonConfiguration customActionBarLeftButtonConfiguration = new CustomActionBarButtonConfiguration();
-		customActionBarLeftButtonConfiguration.setDrawableResId(R.drawable.info_button);
-		customActionBarLeftButtonConfiguration.setOnClickRunnable(new Runnable() {
+		CustomActionBarButtonConfiguration config = new CustomActionBarButtonConfiguration();
+		config.setDrawableResId(R.drawable.info_button);
+		config.setOnClickRunnable(new Runnable() {
 			@Override
 			public void run() {
-
 				Activity activity = getActivity();
 				Intent intent = new Intent(activity, InfoActivity.class);
 				activity.startActivity(intent);
 				activity.overridePendingTransition(R.anim.activity_open_translate_y, R.anim.activity_close_scale);
-				
 			}
 		});
 		
-		setActionBarCustomLeftButtonConfiguration(customActionBarLeftButtonConfiguration);
-		
+		setActionBarCustomLeftButtonConfiguration(config);
+
 		setActionBarRightButtonType(ButtonType.MENU);
 	}
 

@@ -141,11 +141,8 @@ public class MainActivity
 			public void run() {
 				menuListFragment.refreshList(sectionsTreeData);
 				setupHomeFragment();
-
 			}
 		});
-		
-		
 	}
 	
 	public void setupHomeFragment() {
@@ -172,17 +169,21 @@ public class MainActivity
 		// Update your UI here.
 		
     	int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
-    	Boolean fragmentAdded = false;
+    	Boolean fragmentWasPushed = false;
     	
-    	Log.i("onBackStackChanged", "onBackStackChanged (" + backStackEntryCount + ")");
+    	Log.i(TAG, "onBackStackChanged (" + backStackEntryCount + ")");
     	
     	if (backStackEntryCount == 0) {
+            Log.i(TAG, "backStackEntryCount = 0");
+
     		if (!fragmentCleanUpProcessRunning) {
     			MainActivity.this.finish();
+				return;
     		}
     		
     	// FRAGMENT AS BEEN POPED
     	} else if (backStackEntryCount < lastSavedBackStackEntryCount) {
+            Log.i(TAG, "backStackEntryCount < lastSavedBackStackEntryCount");
     		
     		if (contentFragments.size() > 0) {
     			contentFragments.remove((contentFragments.size() - 1));
@@ -203,29 +204,35 @@ public class MainActivity
     		
     	// FRAGMENT AS BEEN PUSHED
     	} else {
+
+            Log.i(TAG, "backStackEntryCount < lastSavedBackStackEntryCount");
     		
     		lastSavedBackStackEntryCount = (lastSavedBackStackEntryCount + 1);
-    		fragmentAdded = true;
+            fragmentWasPushed = true;
 //    		Log.i(TAG, "onBackStackChanged " + backStackEntryCount + ", " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
     	}
-    	
 
-
-    	
-    	BaseFragment currentFragment = null;
+    	BaseFragment currentFragment;
     	int fragmentIndex = (lastSavedBackStackEntryCount - 1);
     	fragmentIndex = backStackEntryCount - 1;
     	
-    	Log.i(TAG, "backStackEntryCount : " + backStackEntryCount + ", lastSavedBackStackEntryCount ("+ contentFragments.size() +")) : " + lastSavedBackStackEntryCount + ", currentContentFragment : " + currentContentFragment + ", fragmentIndex : " + fragmentIndex);
+    	Log.i(TAG, "");
+        Log.i(TAG, "backStackEntryCount : " + backStackEntryCount);
+        Log.i(TAG, "lastSavedBackStackEntryCount: " + lastSavedBackStackEntryCount);
+        Log.i(TAG, "contentFragments.size(): "+ contentFragments.size());
+        Log.i(TAG, "currentContentFragment : " + currentContentFragment);
+        Log.i(TAG, "fragmentIndex : " + fragmentIndex);
     	
     	// FRAGMENT_INDEX BECOME -1... WHY ?
     	
     	if (contentFragments != null && contentFragments.size() > fragmentIndex) {
-    		
+            Log.i(TAG, "AAA");
     		if (fragmentIndex > -1 && contentFragments.get(fragmentIndex) != null && contentFragments.get(fragmentIndex) instanceof BaseFragment) {
+                Log.i(TAG, "BBB");
     			currentFragment = (BaseFragment) contentFragments.get(fragmentIndex);
     			if (currentFragment != null) {
-    				Log.i(TAG, "" + contentFragments.get(fragmentIndex).getClass() + ", " + currentFragment.getActionBarLeftButtonType());
+                    Log.i(TAG, "CCC");
+    				Log.i(TAG, "Result: " + contentFragments.get(fragmentIndex).getClass() + ", " + currentFragment.getActionBarLeftButtonType());
             		getCustomActionBarView().updateActionBarButtonsAccordingToFragment(currentFragment);
     			}
         		
@@ -314,9 +321,7 @@ public class MainActivity
 		
 		HttpRestClient.get(URL, null, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                
-            }
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {}
             
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -325,9 +330,7 @@ public class MainActivity
             }
             
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-            	
-            }
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {}
         });
 		
 	}
@@ -462,30 +465,26 @@ public class MainActivity
 				}
 			});
 		}
-		
-		
 	}
 
 	public void setupYoutubePlayerFragment(String videoID, RelativeLayout videoPlayerViewWrapper) {
 		setupYoutubePlayerFragment(videoID, videoPlayerViewWrapper, false);
 	}
-	public void setupYoutubePlayerFragment(String videoID, RelativeLayout videoPlayerViewWrapper, Boolean autoplay) {
-		
+	public void setupYoutubePlayerFragment(String videoId, RelativeLayout videoPlayerViewWrapper, Boolean autoplay) {
 		if (videoPlayerView == null) {
-			videoPlayerView = new VideoPlayerView(this, videoID);
+			videoPlayerView = new VideoPlayerView(this, videoId);
 		}
 		
 		if (videoPlayerView.getParent() != videoPlayerViewWrapper) {
 			Log.i(TAG, "videoPlayerView - attachTo");
 			if (videoPlayerView != null) {
 				videoPlayerView.setAutoplay(autoplay);
-				videoPlayerView.attachTo(videoPlayerViewWrapper, videoID);
+				videoPlayerView.attachTo(videoPlayerViewWrapper, videoId);
 			}
 			
 		} else {
 			Log.i(TAG, "videoPlayerView - attachTo not needed");
 		}
-		
 	}
 	
  	protected void onStart() {
@@ -595,16 +594,16 @@ public class MainActivity
 					twitterShareManager.manageTwitterCallBackUrl(intent);
 				}
 			}, 1000);
-        	
         }
-    	
     }
 
-	public void switchContent(final Fragment fragment, final Boolean addFragment) {
+	public void switchContent(final Fragment fragment, final boolean pushFragment) {
+
+        // https://www.raywenderlich.com/149112/android-fragments-tutorial-introduction
 		
-		Log.i(TAG, "switchContent - addFragment : " + addFragment);
+		Log.i(TAG, "switchContent - fragment: " + fragment.getClass().getSimpleName() + ", pushFragment: " + pushFragment);
 		
-		if (!addFragment) {
+		if (!pushFragment) {
 			getSlidingMenu().showContent();
 		}
 		
@@ -616,7 +615,7 @@ public class MainActivity
 				FragmentManager fm = getSupportFragmentManager();
 				FragmentTransaction ft = fm.beginTransaction();
 				
-				if (addFragment) {
+				if (pushFragment) {
 					// Building a Flexible UI with fragments
 					// http://developer.android.com/training/basics/fragments/fragment-ui.html
 					// How to Reverse Fragment Animations on BackStack?
@@ -634,34 +633,10 @@ public class MainActivity
 				} else {
 					
 					Log.i(TAG, "backStackEntryCount : " + fm.getBackStackEntryCount() + ", lastSavedBackStackEntryCount : " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
-			    	
-/*
-					int backStackCount = fm.getBackStackEntryCount();
-					for (int i = 0; i < backStackCount; i++) {
 
-					    // Get the back stack fragment id.
-					    int backStackId = getSupportFragmentManager().getBackStackEntryAt(i).getId();
-
-					    fm.popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-					}
-*/
-					
-//					Log.i(TAG, "contentFragments.size: " + contentFragments.size());
-								
-/*
-					for (int i = 0; i < contentFragments.size(); i++) {
-						Fragment currentFragment = contentFragments.get((contentFragments.size()-1));
-						
-						if (currentFragment != null) {
-							ft.remove(currentFragment);
-							Log.i(TAG, "Remove fragment: " + currentFragment.getClass());
-						}
-					}
-*/
 					fragmentCleanUpProcessRunning = true;
 					FragmentUtils.sDisableFragmentAnimations = true;
-					// CLEAN UP !
+					// Clean up fragments stack firstly
 					while (fm.getBackStackEntryCount() > 0){
 					    fm.popBackStackImmediate();
 					}
@@ -680,20 +655,15 @@ public class MainActivity
 					
 					contentFragments.add(fragment);
 					currentContentFragment = fragment;
-//					lastSavedBackStackEntryCount = (lastSavedBackStackEntryCount + 1);
 					
 					Log.i(TAG, "C - backStackEntryCount : " + fm.getBackStackEntryCount() + ", lastSavedBackStackEntryCount : " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
-			    	
-					
-					getCustomActionBarView().updateActionBarButtonsAccordingToFragment((BaseFragment) fragment);
-					
+//					getCustomActionBarView().updateActionBarButtonsAccordingToFragment((BaseFragment) fragment);
 				}
 				
 				ft.commit();
-				
-					
 			}
-		}, !addFragment ? 550 : 1);
+
+		}, !pushFragment ? 550 : 1);
 		
 	}
 

@@ -5,6 +5,7 @@ import android.animation.Animator.AnimatorListener;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +15,11 @@ import android.widget.RelativeLayout;
 import com.afrikawood.banguiwood.R;
 import com.afrikawood.banguiwood.tools.BaseFragment.ButtonType;
 
+import java.util.Locale;
+
 public class CustomActionBarView extends RelativeLayout {
+
+    private static final String TAG = String.format(Locale.FRENCH, "[%s]", CustomActionBarView.class.getSimpleName());
 
 	private FragmentActivity context;
 
@@ -167,6 +172,8 @@ public class CustomActionBarView extends RelativeLayout {
 		ButtonType rightActionBarButtonType = fragment.getActionBarRightButtonType();
 		CustomActionBarButtonConfiguration actionBarCustomLeftButtonConfiguration = fragment.getActionBarCustomLeftButtonConfiguration();
 		CustomActionBarButtonConfiguration actionBarCustomRightButtonConfiguration = fragment.getActionBarCustomRightButtonConfiguration();
+
+		Log.i(TAG, "leftActionBarButtonType: " + leftActionBarButtonType);
 		
 		// LEFT
 		if (leftActionBarButtonType != ButtonType.BACK) {
