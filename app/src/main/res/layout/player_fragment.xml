@@ -14,8 +14,7 @@
             android:id="@+id/videoPlayerWrapperView"
 	    	android:layout_width="match_parent"
     		android:layout_height="220dp"
-    		android:background="#ff000000">
-    	</RelativeLayout>
+    		android:background="#ff000000" />
     	
         <com.afrikawood.banguiwood.utils.CustomFontTextView
 	        android:id="@+id/sectionTitleTextView"
