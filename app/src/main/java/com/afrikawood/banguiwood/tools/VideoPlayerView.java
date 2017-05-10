@@ -191,7 +191,7 @@ public class VideoPlayerView
 	}
 	
 	public void showYoutubeThumbnailViewWrapper(long animationDuration, final Runnable animationEndRunnable) {
-		
+
 		if (youtubeThumbnailViewWrapper != null) {
 			AnimationUtilities.fadeIn(youtubeThumbnailViewWrapper, new Runnable() {
 				@Override
@@ -205,7 +205,7 @@ public class VideoPlayerView
 	}
 	
 	public void hideYoutubeThumbnailViewWrapper(long animationDuration, final Runnable animationEndRunnable) {
-		
+
 		if (youtubeThumbnailViewWrapper != null) {
 			youtubeThumbnailViewWrapper.animate().alpha(0f).setDuration(animationDuration).setListener(new AnimatorListener() {
 				@Override
@@ -267,7 +267,7 @@ public class VideoPlayerView
 			if (youtubeThumbnailViewWrapper != null) {
 				youtubeThumbnailViewWrapper.setAlpha(0f);
 			}
-			
+
 			if (youtubePlayerFragmentWrapper != null) {
 				youtubePlayerFragmentWrapper.setAlpha(1f);
 			}
@@ -384,10 +384,6 @@ public class VideoPlayerView
         }
 		
 		youtubePlayerIsInitialized = true;
-	}
-
-	protected YouTubePlayer.Provider getYouTubePlayerProvider() {
-	    return (YouTubePlayerSupportFragment) youtubePlayerFragment;
 	}
 	
 	public void destroy() {
