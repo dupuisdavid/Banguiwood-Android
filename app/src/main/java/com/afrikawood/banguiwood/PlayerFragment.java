@@ -137,7 +137,7 @@ public class PlayerFragment extends BaseFragment implements VideoSuggestionViewD
 				if (videoPlayerWrapperView == null) {
 					videoPlayerWrapperView = (RelativeLayout) rootView.findViewById(R.id.videoPlayerWrapperView);
 				}
-				
+
 				new Handler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
