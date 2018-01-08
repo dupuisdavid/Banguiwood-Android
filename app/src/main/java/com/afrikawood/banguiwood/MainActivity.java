@@ -281,15 +281,18 @@ public class MainActivity
 		mWindowParams.format = PixelFormat.OPAQUE;
 		mWindowParams.windowAnimations = android.R.style.Animation_Toast;
 
-		WindowManager mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-		mWindowManager.addView(splashscreenView, mWindowParams);
-
+		WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+		if (windowManager != null) {
+			windowManager.addView(splashscreenView, mWindowParams);
+		}
 	}
 	
 	private void closeAndDestroySplashscreen() {
-		
-		WindowManager mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-		mWindowManager.removeView(splashscreenView);
+		WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+		if (windowManager != null && splashscreenView != null) {
+			windowManager.removeView(splashscreenView);
+		}
+
 	}
 	
 	public void startSectionsTreeRequest(final Runnable completionRunnable) {
