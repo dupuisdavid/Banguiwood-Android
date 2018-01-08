@@ -49,7 +49,7 @@
     <string name="twitterPrefKeyOauthSecret">oauth_token_secret</string>
     <string name="twitterPrefKeyTwitterLogin">isTwitterLogedIn</string>
     <string name="twitterCallbackBaseUrl">com.afrikawood.banguiwood://</string>
-    <string name="twitterCallbackMethodName">twitterLoginSuccess</string>
+    <string name="twitterCallbackMethodName">twitter-login-success</string>
     <string name="twitterUrlTwitterAuth">auth_url</string>
     <string name="twitterUrlTwitterOauthVerifier">oauth_verifier</string>
     <string name="twitterUrlTwitterOauthToken">oauth_token</string>
