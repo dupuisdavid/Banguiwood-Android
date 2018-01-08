@@ -27,12 +27,16 @@
 		android:gravity="center" />
     
     <ProgressBar
-		android:id="@+id/loadingProgressBar"
+		android:id="@+id/progressbar"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:layout_below="@+id/theBiggestVideosPlateformOfCentralAfricanRepublicTextView"
-		android:layout_marginTop="15dp" />
+		android:layout_marginTop="15dp"
+        android:visibility="visible"
+        android:indeterminate="true"
+        android:theme="@style/AppTheme.ProgressBar"
+        style="?android:attr/progressBarStyle" />
     
     <ImageView
 		android:id="@+id/banguiwoodOtherLogosImageView"
