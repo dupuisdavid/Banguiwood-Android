@@ -150,7 +150,7 @@ public class MainActivity
 		Section homeSection = sectionsTreeData.get(0);
 		SectionPlaylist inFrontSectionPlaylist = (SectionPlaylist) homeSection.sections.get(0);
 		
-		HomeFragment fragment = new HomeFragment(inFrontSectionPlaylist);
+		HomeFragment fragment = HomeFragment.newInstance(inFrontSectionPlaylist);
 		fragment.setDelegate(this);
 		switchContent(fragment, false);
 	}
