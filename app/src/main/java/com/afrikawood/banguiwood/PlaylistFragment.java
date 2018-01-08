@@ -44,6 +44,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class PlaylistFragment extends BaseFragment {
 
+    private static final String LOG_TAG = PlaylistFragment.class.getSimpleName();
+
 	private FrameLayout rootView;
 
 	private SectionPlaylist section;
@@ -58,7 +60,7 @@ public class PlaylistFragment extends BaseFragment {
 	private ArrayList<Object> dataList;
 
     private static final String ARG_SECTION = "section";
-    private static final String ARG_BREADCRUMBS = "section";
+    private static final String ARG_BREADCRUMBS = "breadcrumbs";
     private static final String ARG_FORCE_BACK_BUTTON = "forceBackButton";
 
     public static PlaylistFragment newInstance(Section section, String breadCrumbs, Boolean forceBackButton) {
@@ -98,9 +100,9 @@ public class PlaylistFragment extends BaseFragment {
 		rootView = (FrameLayout) inflater.inflate(R.layout.playlist_fragment, container, false);
 		rootView.setDrawingCacheEnabled(true);
 
-		TextView breadCrumbsTextView = (TextView) rootView.findViewById(R.id.breadCrumbsTextView);
+		TextView breadCrumbsTextView = rootView.findViewById(R.id.breadCrumbsTextView);
 		breadCrumbsTextView.setText(breadCrumbs);
-		loadingProgressBar = (ProgressBar) rootView.findViewById(R.id.loadingProgressBar);
+		loadingProgressBar = rootView.findViewById(R.id.loadingProgressBar);
 		
 		dataList = new ArrayList<>();
 		
@@ -154,8 +156,7 @@ public class PlaylistFragment extends BaseFragment {
 			setupAdMobBanner();
 			
 		}
-		
-		
+
 		return rootView;
 	}
 	
