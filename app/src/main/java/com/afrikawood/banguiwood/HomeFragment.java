@@ -14,7 +14,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 
 import com.afrikawood.banguiwood.business.SectionPlaylist;
@@ -32,9 +31,6 @@ import com.afrikawood.banguiwood.utils.DateUtilities;
 import com.afrikawood.banguiwood.utils.HandlerUtilities;
 import com.afrikawood.banguiwood.utils.Network;
 import com.afrikawood.banguiwood.utils.StringUtilities;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -55,7 +51,7 @@ public class HomeFragment extends BaseFragment {
 	private Video topVideo;
 	private ScrollView scrollView;
 	private RelativeLayout videoPlayerWrapperView;
-	private ProgressBar loadingProgressBar;
+	private ProgressBar progressBar;
 	private int requestLoopIndex;
 	
 	private BounceListView listView;
@@ -121,8 +117,8 @@ public class HomeFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.home_fragment, container, false);
 		scrollView = rootView.findViewById(R.id.scrollView);
-		
-		loadingProgressBar = rootView.findViewById(R.id.loadingProgressBar);
+
+        progressBar = rootView.findViewById(R.id.progressbar);
 		
 		dataList = new ArrayList<>();
 		
@@ -158,7 +154,7 @@ public class HomeFragment extends BaseFragment {
 								HandlerUtilities.performRunnableAfterDelay(new Runnable() {
 									@Override
 									public void run() {
-										AnimationUtilities.fadeOut(loadingProgressBar, null);
+										AnimationUtilities.fadeOut(progressBar, null);
 										AnimationUtilities.fadeIn(scrollView, new Runnable() {
 											@Override
 											public void run() {
@@ -168,7 +164,7 @@ public class HomeFragment extends BaseFragment {
 											}
 										});
 									}
-								}, 350);
+								}, 150);
 							}
 							
 						}, new Runnable() {
@@ -178,7 +174,7 @@ public class HomeFragment extends BaseFragment {
 								final String textAlertDialogViewTitle = getContext().getResources().getString(R.string.textAlertDialogViewTitle);
 								final String textServerConnectionImpossible = getContext().getResources().getString(R.string.textServerConnectionImpossible);
 								
-								AnimationUtilities.fadeOut(loadingProgressBar, new Runnable() {
+								AnimationUtilities.fadeOut(progressBar, new Runnable() {
 									@Override
 									public void run() {
 										AlertDialogBuilder.build(getContext(), textAlertDialogViewTitle, textServerConnectionImpossible);
@@ -189,12 +185,8 @@ public class HomeFragment extends BaseFragment {
 						});
 						
 					}
-				}, 350);
+				}, 150);
 			}
-			
-			// AD
-			setupAdMobBanner();
-			
 		}
 
 		return rootView;
@@ -230,7 +222,7 @@ public class HomeFragment extends BaseFragment {
 				
 			}
 	        
-			Log.i("pickVideosSuggestions", "LOOP : " + count);
+			Log.i(LOG_TAG, "LOOP : " + count);
 			
 	        count++;
 	    }
@@ -288,7 +280,7 @@ public class HomeFragment extends BaseFragment {
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.requestLayout();
 		
-		Log.i("height", "" + height);
+		Log.i(LOG_TAG, "Height: " + height);
 		
 	}
 	
@@ -312,7 +304,7 @@ public class HomeFragment extends BaseFragment {
 		String youtubeBrowserApiKey = getContext().getResources().getString(R.string.youtubeBrowserApiKey);
 			
 		String url = String.format(unformattedURL, playlistIdentifier, youtubeBrowserApiKey, nbFrontPageVideo, (!nextPageToken.equals("") ? "&pageToken=" + nextPageToken : ""));
-		Log.i("URL", "" + url);
+		Log.i(LOG_TAG, "Url: " + url);
 		
 		HttpRestClient.get(url, null, new JsonHttpResponseHandler() {
             @SuppressWarnings("unused")
@@ -387,7 +379,7 @@ public class HomeFragment extends BaseFragment {
 	
 	public void setupList() {
 		
-		Log.i("dataList", "" + dataList);
+		Log.i(LOG_TAG, "Datalist: " + dataList);
 		
 		listView = rootView.findViewById(R.id.listView);
 //		listView.setScrollContainer(false);
@@ -414,28 +406,6 @@ public class HomeFragment extends BaseFragment {
         });
 	}
 	
-	public void setupAdMobBanner() {
-		
-		// I keep getting the error 'The Google Play services resources were not found. 
-		// Check your project configuration to ensure that the resources are included.'
-		// https://developers.google.com/mobile-ads-sdk/kb/?hl=it#resourcesnotfound
-		
-		RelativeLayout.LayoutParams adViewLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		adViewLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-
-		AdView adView = new AdView(getContext());
-		adView.setLayoutParams(adViewLayoutParams);
-	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobHomeBannerViewBlockIdentifier));
-	    adView.setAdSize(AdSize.BANNER);
-	    
-	    RelativeLayout adWrapperLayout = rootView.findViewById(R.id.adWrapperLayout);
-	    adWrapperLayout.addView(adView);
-
-	    AdRequest adRequest = new AdRequest.Builder().build();
-	    adView.loadAd(adRequest);
-	
-	}
-	
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -444,7 +414,7 @@ public class HomeFragment extends BaseFragment {
 	@Override
 	public void onStart(){
 	    super.onStart();
-	    Log.i("" + this.getClass(), "onStart");
+	    Log.i(LOG_TAG, "onStart");
 	    
 	    if (section != null && !section.name.equals("")) {
             ((MainActivity) getActivity()).trackView(section.name);
