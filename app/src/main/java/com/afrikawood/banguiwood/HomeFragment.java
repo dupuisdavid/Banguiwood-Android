@@ -11,14 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 
-import com.afrikawood.banguiwood.business.Section;
 import com.afrikawood.banguiwood.business.SectionPlaylist;
 import com.afrikawood.banguiwood.business.Video;
 import com.afrikawood.banguiwood.tools.AlertDialogBuilder;
@@ -51,8 +49,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class HomeFragment extends BaseFragment {
 
+    private static final String LOG_TAG = HomeFragment.class.getSimpleName();
+
 	private View rootView;
-	private SectionPlaylist section;
 	private Video topVideo;
 	private ScrollView scrollView;
 	private RelativeLayout videoPlayerWrapperView;
@@ -75,27 +74,20 @@ public class HomeFragment extends BaseFragment {
     interface HomeFragmentDelegate {
 		void requestForSectionPlayListDidFinish(HomeFragment fragment);
 	}
-	
-	public HomeFragment(SectionPlaylist section) {
-		
-		this.section = section;
-	
-		CustomActionBarButtonConfiguration config = new CustomActionBarButtonConfiguration();
-		config.setDrawableResId(R.drawable.info_button);
-		config.setOnClickRunnable(new Runnable() {
-			@Override
-			public void run() {
-				Activity activity = getActivity();
-				Intent intent = new Intent(activity, InfoActivity.class);
-				activity.startActivity(intent);
-				activity.overridePendingTransition(R.anim.activity_open_translate_y, R.anim.activity_close_scale);
-			}
-		});
-		
-		setActionBarCustomLeftButtonConfiguration(config);
 
-		setActionBarRightButtonType(ButtonType.MENU);
-	}
+    public HomeFragment() {}
+
+    private static final String SECTION_ARG_PARAM = "section";
+
+    private SectionPlaylist section;
+
+    public static HomeFragment newInstance(SectionPlaylist section) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(SECTION_ARG_PARAM, section);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
 	@Override
 	public void onAttach(Context context) {
@@ -105,14 +97,32 @@ public class HomeFragment extends BaseFragment {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            section = getArguments().getParcelable(SECTION_ARG_PARAM);
+        }
+
+        CustomActionBarButtonConfiguration config = new CustomActionBarButtonConfiguration();
+        config.setDrawableResId(R.drawable.info_button);
+        config.setOnClickRunnable(new Runnable() {
+            @Override
+            public void run() {
+                Activity activity = getActivity();
+                Intent intent = new Intent(activity, InfoActivity.class);
+                activity.startActivity(intent);
+                activity.overridePendingTransition(R.anim.activity_open_translate_y, R.anim.activity_close_scale);
+            }
+        });
+
+        setActionBarCustomLeftButtonConfiguration(config);
+        setActionBarRightButtonType(ButtonType.MENU);
     }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.home_fragment, container, false);
-		scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
+		scrollView = rootView.findViewById(R.id.scrollView);
 		
-		loadingProgressBar = (ProgressBar) rootView.findViewById(R.id.loadingProgressBar);
+		loadingProgressBar = rootView.findViewById(R.id.loadingProgressBar);
 		
 		dataList = new ArrayList<>();
 		
@@ -190,8 +200,9 @@ public class HomeFragment extends BaseFragment {
 		return rootView;
 	}
 	
-	private ArrayList<Video> pickVideosSuggestions(int pickNumber, String youtubeVideoIdentifier) {
-	    
+	private ArrayList<Video> pickVideosSuggestions(String youtubeVideoIdentifier) {
+
+        int pickNumber = 5;
 	    int pickNumberLimit = pickNumber > (dataList.size()) ? ((dataList.size()) - 1) : pickNumber;
 	    
 	    HashMap<String, Video> videosSuggestions = new HashMap<>();
@@ -232,7 +243,7 @@ public class HomeFragment extends BaseFragment {
 	public void setupYoutubePlayerFragment() {
 		
 		if (videoPlayerWrapperView == null) {
-			videoPlayerWrapperView = (RelativeLayout) rootView.findViewById(R.id.videoPlayerWrapperView);
+			videoPlayerWrapperView = rootView.findViewById(R.id.videoPlayerWrapperView);
 		}
 		
 		if (topVideo != null) {
@@ -251,8 +262,8 @@ public class HomeFragment extends BaseFragment {
 	
 	private void updateVideoTextViews() {
 		
-		CustomFontTextView videoTitleTextView = (CustomFontTextView) rootView.findViewById(R.id.videoTitleTextView);
-		CustomFontTextView videoPublicationDateTextView = (CustomFontTextView) rootView.findViewById(R.id.videoPublicationDateTextView);
+		CustomFontTextView videoTitleTextView = rootView.findViewById(R.id.videoTitleTextView);
+		CustomFontTextView videoPublicationDateTextView = rootView.findViewById(R.id.videoPublicationDateTextView);
 		
 		if (topVideo == null) {
 			videoTitleTextView.setVisibility(View.GONE);
@@ -346,18 +357,9 @@ public class HomeFragment extends BaseFragment {
 	}
 	
 	private void parseSectionsPlayList(JSONArray data) {
-		
-		ArrayList<Section> subSections;
-		
 		if (requestLoopIndex == 0) {
 			if (section != null) {
-				subSections = section.sections;
-				
-				for (int i = 0; i < subSections.size(); i++) {
-					Section section = subSections.get(i);
-					
-					dataList.add(section);
-				}
+                dataList.addAll(section.sections);
 			}
 		}
 		
@@ -387,7 +389,7 @@ public class HomeFragment extends BaseFragment {
 		
 		Log.i("dataList", "" + dataList);
 		
-		listView = (BounceListView) rootView.findViewById(R.id.listView);
+		listView = rootView.findViewById(R.id.listView);
 //		listView.setScrollContainer(false);
         listViewAdapter = new ListAdapter(getContext(), dataList);
         listView.setAdapter(listViewAdapter);
@@ -402,7 +404,7 @@ public class HomeFragment extends BaseFragment {
                 	Video video = (Video) data;
 
                     if (getActivity() instanceof MainActivity) {
-                        PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(5, video.youtubeVideoIdentifier));
+                        PlayerFragment fragment = new PlayerFragment(video, section, pickVideosSuggestions(video.youtubeVideoIdentifier));
                         MainActivity mainActivity = (MainActivity) getActivity();
                         mainActivity.switchContent(fragment, true);
                     }
@@ -426,7 +428,7 @@ public class HomeFragment extends BaseFragment {
 	    adView.setAdUnitId(getResources().getString(R.string.googleAdMobHomeBannerViewBlockIdentifier));
 	    adView.setAdSize(AdSize.BANNER);
 	    
-	    RelativeLayout adWrapperLayout = (RelativeLayout) rootView.findViewById(R.id.adWrapperLayout);
+	    RelativeLayout adWrapperLayout = rootView.findViewById(R.id.adWrapperLayout);
 	    adWrapperLayout.addView(adView);
 
 	    AdRequest adRequest = new AdRequest.Builder().build();
