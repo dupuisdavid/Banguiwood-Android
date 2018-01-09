@@ -1,24 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:orientation="horizontal"
-    android:background="#ffa79382">
-<!--
-    <ImageView
-        android:id="@+id/row_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="10dp" />
--->
-    <TextView
-        android:id="@+id/row_title"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:paddingLeft="35dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:textColor="#ffffffff"
-        android:textSize="12sp" />
+    android:layout_height="wrap_content">
 
-</LinearLayout>
+    <!-- Section title -->
+    <LinearLayout
+        android:id="@+id/section_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="#FF736559"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/section_title_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:paddingEnd="20dp"
+            android:paddingRight="20dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFE4CA"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!-- Item title -->
+    <LinearLayout
+        android:id="@+id/item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:background="#FFA79382"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/item_title_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingStart="35dp"
+            android:paddingLeft="35dp"
+            android:paddingEnd="20dp"
+            android:paddingRight="20dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFFFF"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afrikawood.banguiwood.business.MenuItem;
@@ -31,7 +32,6 @@ class MenuListAdapter extends ArrayAdapter<MenuItem> {
 
 		this.items = items;
 		this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
 	}
 	
 	@Override
@@ -50,50 +50,56 @@ class MenuListAdapter extends ArrayAdapter<MenuItem> {
 	}
 	
 	private static class ViewHolder {
-		TextView title;
+	    LinearLayout sectionLayout;
+		TextView sectionTitleTextView;
+        LinearLayout itemLayout;
+        TextView itemTitleTextView;
 	}
 
 	@NonNull
 	public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-		
 		ViewHolder holder;
-		View view = convertView;
 		
 		// ListView with Sections/Separators
 		// http://bartinger.at/listview-with-sectionsseparators/
 		
 		// Android ListView with Section Header
 		// http://androidtrainningcenter.blogspot.fr/2012/03/android-listview-with-section-header.html
-		
-		final MenuItem menuItem = items.get(position);
-		
-		if (menuItem != null) {
-			if (view == null) {
 
-				if (!menuItem.isRootSection) {
-					view = layoutInflater.inflate(R.layout.row, parent, false);
-				} else {
-					view = layoutInflater.inflate(R.layout.section_row, parent, false);
-				}
+        @NonNull MenuItem menuItem = items.get(position);
 
-				TextView title = (TextView) view.findViewById(R.id.row_title);
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.row, parent,false);
 
-				holder = new ViewHolder();
-				holder.title = title;
+            LinearLayout sectionLayout = convertView.findViewById(R.id.section_layout);
+            TextView sectionTitleTextView = convertView.findViewById(R.id.section_title_textview);
+            LinearLayout itemLayout = convertView.findViewById(R.id.item_layout);
+            TextView itemTitleTextView = convertView.findViewById(R.id.item_title_textview);
 
-				view.setTag(holder);
+            holder = new ViewHolder();
+            holder.sectionLayout = sectionLayout;
+            holder.sectionTitleTextView = sectionTitleTextView;
+            holder.itemLayout = itemLayout;
+            holder.itemTitleTextView = itemTitleTextView;
 
-			} else {
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-				holder = (ViewHolder) view.getTag();
+        if (!menuItem.isRootSection) {
+            holder.sectionLayout.setVisibility(View.GONE);
+            holder.sectionTitleTextView.setText("");
+            holder.itemLayout.setVisibility(View.VISIBLE);
+            holder.itemTitleTextView.setText(menuItem.tag);
+        } else {
+            holder.sectionLayout.setVisibility(View.VISIBLE);
+            holder.sectionTitleTextView.setText(menuItem.tag);
+            holder.itemLayout.setVisibility(View.GONE);
+            holder.itemTitleTextView.setText("");
+        }
 
-			}
-
-
-			holder.title.setText(menuItem.tag);
-		}
-		
-		return view;
+		return convertView;
 	}
 	
 }

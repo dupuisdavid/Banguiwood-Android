@@ -169,7 +169,6 @@ public class MainActivity
 		// Update your UI here.
 		
     	int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
-    	Boolean fragmentWasPushed = false;
     	
     	Log.i(TAG, "onBackStackChanged (" + backStackEntryCount + ")");
     	
@@ -202,19 +201,17 @@ public class MainActivity
     		lastSavedBackStackEntryCount = (lastSavedBackStackEntryCount - 1);
 //    		Log.i(TAG, "onBackStackChanged " + backStackEntryCount + ", " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
     		
-    	// FRAGMENT AS BEEN PUSHED
+    	// FRAGMENT HAS BEEN PUSHED
     	} else {
 
             Log.i(TAG, "backStackEntryCount < lastSavedBackStackEntryCount");
     		
     		lastSavedBackStackEntryCount = (lastSavedBackStackEntryCount + 1);
-            fragmentWasPushed = true;
 //    		Log.i(TAG, "onBackStackChanged " + backStackEntryCount + ", " + lastSavedBackStackEntryCount + ", " + currentContentFragment);
     	}
 
     	BaseFragment currentFragment;
-    	int fragmentIndex = (lastSavedBackStackEntryCount - 1);
-    	fragmentIndex = backStackEntryCount - 1;
+    	int fragmentIndex = backStackEntryCount - 1;
     	
     	Log.i(TAG, "");
         Log.i(TAG, "backStackEntryCount : " + backStackEntryCount);
@@ -328,8 +325,8 @@ public class MainActivity
             
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-            	Log.i(TAG, "response: " + response.length());
-            	parseRootSectionsTreeWithJSONArrayData(response, completionRunnable);
+            	Log.i(TAG, "Tree response: " + response.length());
+                parseRootSectionsTreeWithJsonArrayData(response, completionRunnable);
             }
             
             @Override
@@ -338,7 +335,7 @@ public class MainActivity
 		
 	}
 	
-	private void parseRootSectionsTreeWithJSONArrayData(JSONArray arrayData, final Runnable completionRunnable) {
+	private void parseRootSectionsTreeWithJsonArrayData(JSONArray arrayData, final Runnable completionRunnable) {
 		
 		if (sectionsTreeData == null) {
 			sectionsTreeData = new ArrayList<>();
@@ -365,7 +362,7 @@ public class MainActivity
 				if (data.has("categories")) {
 					JSONArray subSections = data.getJSONArray("categories");
 					if (subSections.length() > 0) {
-						parseSectionWithJSONArrayData(subSections, section, (treeDeepIndex+1));
+                        parseSectionWithJsonArrayData(subSections, section, (treeDeepIndex+1));
 					}
 				}
 			}
@@ -379,7 +376,7 @@ public class MainActivity
 		}
 	}
 	
-	private void parseSectionWithJSONArrayData(JSONArray arrayData, Section parentSection, int treeDeepIndex) {
+	private void parseSectionWithJsonArrayData(JSONArray arrayData, Section parentSection, int treeDeepIndex) {
 		
 		try {
 			
@@ -408,7 +405,6 @@ public class MainActivity
 					if (data.has("articlesURL")) {
 						((SectionArticles) section).url = data.getString("articlesURL");
 					}
-					
 				}
 				
 				section.identifier = data.getString("id");
@@ -427,19 +423,19 @@ public class MainActivity
 				}
 				
 				parentSection.sections.add(section);
-				
-				String arrows = "";
+
+				StringBuilder arrows = new StringBuilder();
 				for (int j = 0; j < treeDeepIndex; j++) {
-					arrows = arrows + ">";
+					arrows.append(">");
 				}
 				
-//				Log.i(TAG, ">"+ arrows +" "+ section.getName() +" [" + treeDeepIndex + "]" + "(parent : " + parentSection.getName() + ")");
+				Log.i(TAG, ">" + arrows + " " + section.name + " [" + treeDeepIndex + "]" + " (parent: " + parentSection.name + ")");
 				
 				
 				if (data.has("categories")) {
 					JSONArray subSections = data.getJSONArray("categories");
 					if (subSections.length() > 0) {
-						parseSectionWithJSONArrayData(subSections, section, (treeDeepIndex+1));
+						parseSectionWithJsonArrayData(subSections, section, (treeDeepIndex+1));
 					}
 				}
 			}
@@ -458,7 +454,7 @@ public class MainActivity
 			return;
 		}
 		
-		ImageButton slideRightMenuButton = (ImageButton) actionBar.getCustomView().findViewById(R.id.slideRightMenuButton);
+		ImageButton slideRightMenuButton = actionBar.getCustomView().findViewById(R.id.slideRightMenuButton);
 		
 		if (slideRightMenuButton != null) {
 			slideRightMenuButton.setOnClickListener(new OnClickListener() {
