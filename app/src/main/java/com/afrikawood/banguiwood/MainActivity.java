@@ -238,7 +238,6 @@ public class MainActivity
     	} else {    		
     		Log.i(TAG, "contentFragments error (Invalid index 0, size is 0)");
     	}
-
 	}
 	
 	public void setupGoogleTracker() {
@@ -254,9 +253,7 @@ public class MainActivity
 	}
 	
 	private void setupAndOpenSplashscreenView() {
-		
 		Log.i(TAG, "setupSplashscreenView");
-		
 
 		FrameLayout.LayoutParams splashscreenViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		
@@ -293,7 +290,6 @@ public class MainActivity
 	}
 	
 	public void startSectionsTreeRequest(final Runnable completionRunnable) {
-		
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
@@ -336,7 +332,6 @@ public class MainActivity
 	}
 	
 	private void parseRootSectionsTreeWithJsonArrayData(JSONArray arrayData, final Runnable completionRunnable) {
-		
 		if (sectionsTreeData == null) {
 			sectionsTreeData = new ArrayList<>();
 		}
@@ -377,7 +372,6 @@ public class MainActivity
 	}
 	
 	private void parseSectionWithJsonArrayData(JSONArray arrayData, Section parentSection, int treeDeepIndex) {
-		
 		try {
 			
 			for (int i = 0; i < arrayData.length(); i++) {

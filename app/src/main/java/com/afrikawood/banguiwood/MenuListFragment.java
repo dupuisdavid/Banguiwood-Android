@@ -124,7 +124,5 @@ public class MenuListFragment extends ListFragment {
             }, 350);
 			
 		}
-
 	}
-
 }
